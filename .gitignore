@@ -1,0 +1,6 @@
+app/
+backend/
+users/
+*.json
+project_items*.graphql
+query*.graphq*
