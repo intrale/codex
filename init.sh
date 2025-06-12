@@ -7,6 +7,6 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
 fi
 
 # Clonar el repositorio de Codex
-git clone https://github.com/intrale/app.git app
-git clone https://github.com/intrale/backend.git backend
-git clone https://github.com/intrale/users.git users
+git clone https://github.com/intrale/app.git ../app
+git clone https://github.com/intrale/backend.git ../backend
+git clone https://github.com/intrale/users.git ../users
