@@ -31,6 +31,14 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
     - Crear **sub-issues** asociados para dividir el trabajo en partes manejables.
     - Mover los sub-issues a la columna **"AutoBacklog"**.
     - Mover el issue original a **"Blocked"** con un comentario explicativo.
+- **Tareas en estado `AutoBacklog`:**
+    - Son tareas que deben ser revisadas y priorizadas por el equipo humano.
+    - **No deben estar asignadas a ningún usuario.**
+- **Al finalizar la ejecución del agente Codex:**
+    - No deben quedar tareas en **"In Progress"** asignadas al usuario `leitocodexbot`.  
+      Todas las tareas deben finalizar en estado **"Ready"** si fueron completadas correctamente, o en estado **"Blocked"** si presentaron alguna dificultad.
+    - No deben quedar tareas en la columna **"Todo"**.  
+      Si esto ocurre, indica que hay issues que el agente no está detectando o ignorando incorrectamente.
 
 ---
 
