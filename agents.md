@@ -17,10 +17,14 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
     - Debe **asignarse automáticamente al usuario `leitocodexbot`**.
     - Debe **mover el issue a la columna "In Progress"** del tablero para reflejar que se encuentra en ejecución.
 - Cuando se indique que el agente debe **"buscar tareas"**, se refiere a que debe:
-    - Buscar issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
+    - Buscar todos los issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
     - Ejecutarlos siguiendo los pasos definidos en este documento.
 - Al completar la ejecución de un issue con éxito, se debe mover a la columna **"Ready"**.
-- Si ocurre un error en la ejecución, se debe mover el issue a **"Blocked"** y agregar un comentario detallando el motivo del fallo.
+- Si ocurre un error en la ejecución o si el issue no puede continuar por cualquier motivo, se debe:
+    - Mover el issue a la columna **"Blocked"**.
+    - Agregar un comentario explicando el motivo de la detención o el error.
+    - Crear uno o más **sub-issues** con tareas específicas que permitan resolver el bloqueo.
+    - Estos sub-issues deben ser movidos a la columna **"AutoBacklog"** del tablero.
 - Todos los repositorios involucrados están disponibles en el directorio `workspace`, cada uno en su carpeta correspondiente.
 - Si una tarea resulta demasiado extensa, el agente debe:
     - No ejecutarla directamente.
