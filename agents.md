@@ -13,7 +13,9 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
 - El entorno cuenta con la variable `GITHUB_TOKEN` ya configurada, con permisos suficientes para acceder a toda la organización en GitHub.
 - Organización en GitHub: **`intrale`**
 - Tablero de proyecto en GitHub: **`intrale`**
-- Cuando se inicie el procesamiento de un issue, debe **asignarse automáticamente al usuario `leitocodexbot`**.
+- Cuando se inicie el procesamiento de un issue:
+    - Debe **asignarse automáticamente al usuario `leitocodexbot`**.
+    - Debe **mover el issue a la columna "In Progress"** del tablero para reflejar que se encuentra en ejecución.
 - Cuando se indique que el agente debe **"buscar tareas"**, se refiere a que debe:
     - Buscar issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
     - Ejecutarlos siguiendo los pasos definidos en este documento.
