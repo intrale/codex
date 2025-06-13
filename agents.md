@@ -1,74 +1,84 @@
 # agents.md
 
-## Descripción General
+## 📘 Descripción General
 
-Este archivo documenta la configuración y el comportamiento esperado de los agentes automatizados en este entorno de desarrollo. 
-Se utiliza un agente personalizado que actúa bajo una identidad específica para mantener trazabilidad y control sobre sus acciones.
+Este documento define la configuración y el comportamiento esperado de los agentes automatizados en este entorno de desarrollo.  
+Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`, cuya actividad está claramente diferenciada de los usuarios humanos para facilitar la trazabilidad y la supervisión.
 
 ---
-## Consideraciones Iniciales
-- Todos los comentarios y descripciones utilizadas por codex o derivados tienen que estar realizadas en idioma Español Latinoamericano
-- El entorno tiene configurada la variable "GITHUB_TOKEN" con los permisos necesarios para acceder a toda la organizacion en github
-- El nombre de la organizacion en github es "intrale"
-- El nombre del tablero en github es "intrale"
-- Siempre que se comience a procesar / trabajar con un issue asignarlo al agente automatico identificado en github como “leitocodexbot”
-- Cuando se indique que busque nuevas tareas a realizar, debe buscar en el tablero los issues que se encuentran en la columna de "Todo" o en "Blocked"
-- Cuando se finalice con la ejecucion de un issue moverlo a la columna "Ready"
-- Si la ejecucion de un issue finaliza con error, muevalo a la columna "Blocked" y añada un comentario con el detalle del error.
-- El entorno actual contiene en el directorio “workspace” en carpetas independientes todos los repositorios clonados que están involucrados.
-- Si considera que una tarea es demasiado grande como para poder ejecutarla y llevarla adelante, en lugar de ejecutar la tarea, cree tantos sub-issues como considere conveniente asociados al inicial para subdividir el issue en porciones que puedan ser manipulables y muevalos a "AutoBacklog". Y luego mueva la tarea principal a "Blocked" con un comentario que haga referencia a que se subdividio el alcance de la misma.
 
-## Agentes Definidos
+## 🔧 Consideraciones Iniciales
 
-### 🤖 `leitocodexbot` (usuario personalizado)
+- Todos los comentarios, commits y descripciones realizados por agentes automáticos deben estar en **Español Latinoamericano**.
+- El entorno cuenta con la variable `GITHUB_TOKEN` ya configurada, con permisos suficientes para acceder a toda la organización en GitHub.
+- Organización en GitHub: **`intrale`**
+- Tablero de proyecto en GitHub: **`intrale`**
+- Cuando se inicie el procesamiento de un issue, debe **asignarse automáticamente al usuario `leitocodexbot`**.
+- Cuando se indique que el agente debe **"buscar tareas"**, se refiere a que debe:
+    - Buscar issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
+    - Ejecutarlos siguiendo los pasos definidos en este documento.
+- Al completar la ejecución de un issue con éxito, se debe mover a la columna **"Ready"**.
+- Si ocurre un error en la ejecución, se debe mover el issue a **"Blocked"** y agregar un comentario detallando el motivo del fallo.
+- Todos los repositorios involucrados están disponibles en el directorio `workspace`, cada uno en su carpeta correspondiente.
+- Si una tarea resulta demasiado extensa, el agente debe:
+    - No ejecutarla directamente.
+    - Crear **sub-issues** asociados para dividir el trabajo en partes manejables.
+    - Mover los sub-issues a la columna **"AutoBacklog"**.
+    - Mover el issue original a **"Blocked"** con un comentario explicativo.
 
-**Rol:**  
-Agente automatizado principal que interactúa con el repositorio para resolver issues, generar código, crear ramas y pull requests. Opera bajo una cuenta de usuario propia para diferenciar claramente las acciones humanas de las automatizadas.
+---
+
+## 🤖 Agente Definido: `leitocodexbot`
+
+**Rol principal:**  
+Automatizar tareas repetitivas del ciclo de desarrollo: creación de código, ramas, PRs, comentarios y gestión de issues.
 
 **Permisos:**
-- Lectura y escritura en el repositorio
-- Creación y edición de issues
-- Creación de ramas (`feature/*`, `bugfix/*`, `docs/*`, `refactor/*`)
-- Realización de commits con mensajes claros y estructurados
-- Creación de Pull Requests
-- Asignación de etiquetas a issues y PRs
-- Comentarios automáticos en issues o PRs
+- Clonar, leer y escribir en todos los repos dentro de la organización
+- Crear y editar issues
+- Crear ramas bajo los prefijos `feature/`, `bugfix/`, `docs/`, `refactor/`
+- Realizar commits estructurados
+- Generar y enviar Pull Requests
+- Etiquetar issues y PRs
+- Comentar en issues y PRs cuando sea necesario
 
 **Buenas prácticas:**
-- Referenciar el número de issue relacionado en los commits (`Closes #<número>`)
-- Usar nombres de ramas consistentes
-- Evitar modificaciones innecesarias en archivos binarios
-- Asignar PRs al responsable humano designado con nombre de usuario "leitolarreta"
-- Agregar el prefijo `[auto]` en los títulos de los PRs generados
+- Siempre referenciar el número del issue asociado (ej. `Closes #42`)
+- Nombrar ramas de forma clara y coherente
+- Evitar alterar archivos binarios o sensibles
+- Los PRs deben titularse con el prefijo `[auto]`
+- Asignar todos los PRs al usuario humano **`leitolarreta`**
 
 **Restricciones:**
-- No realizar merges sin revisión
-- No eliminar ramas remotas automáticamente
-- No modificar archivos sensibles (por ejemplo: `.env`, `settings.gradle`, etc.) sin autorización
-- No realizar modificaciones, commits ni PRs al repositorio "codex"
+- ❌ No realizar merges automáticos
+- ❌ No eliminar ramas remotas
+- ❌ No modificar archivos críticos sin aprobación explícita (`.env`, `settings.gradle`, etc.)
+- ❌ No interactuar con el repositorio `codex` (prohibido modificar, hacer commits o PRs)
 
 ---
 
-## Nomenclatura de ramas generadas
+## 🌱 Nomenclatura de ramas
 
-- `feature/<descripcion>` – Nuevas funcionalidades
-- `bugfix/<descripcion>` – Corrección de errores
-- `docs/<descripcion>` – Cambios en documentación
-- `refactor/<descripcion>` – Refactorizaciones técnicas
-
----
-
-## Reglas para Pull Requests generados por el agente
-
-- El título debe comenzar con `[auto]`
-- El cuerpo del PR debe contener una descripción técnica del cambio
-- Se debe vincular el PR con su issue correspondiente
-- El PR debe estar asignado a un humano para su revisión designado con nombre de usuario "leitolarreta"
-- El agente no debe realizar merges
+| Tipo           | Prefijo            | Uso                                  |
+|----------------|--------------------|---------------------------------------|
+| Funcionalidad  | `feature/<desc>`   | Nuevas características                |
+| Corrección     | `bugfix/<desc>`    | Solución de errores                   |
+| Documentación  | `docs/<desc>`      | Cambios en documentación              |
+| Refactorización| `refactor/<desc>`  | Cambios internos sin impacto externo  |
 
 ---
 
-## Consideraciones Finales
+## 📦 Pull Requests generados por `leitocodexbot`
 
-Este agente está diseñado para colaborar, no reemplazar, al equipo humano. Su uso busca maximizar la eficiencia del flujo de trabajo y reducir la carga operativa sobre tareas repetitivas, manteniendo siempre la supervisión humana.
+- Título con prefijo `[auto]`
+- Descripción técnica clara en el cuerpo del PR
+- Asociado al issue que origina el cambio
+- Asignado al revisor humano `leitolarreta`
+- Sin acción de merge por parte del agente
 
+---
+
+## ✅ Consideraciones Finales
+
+El agente `leitocodexbot` no reemplaza la revisión humana.  
+Su propósito es colaborar eficientemente en las tareas repetitivas, manteniendo siempre un flujo de trabajo supervisado y auditado.
