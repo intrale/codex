@@ -14,31 +14,26 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
 - Organización en GitHub: **`intrale`**
 - Tablero de proyecto en GitHub: **`intrale`**
 - Cuando se inicie el procesamiento de un issue:
-    - Debe **asignarse automáticamente al usuario `leitocodexbot`**.
-    - Debe **mover el issue a la columna "In Progress"** del tablero para reflejar que se encuentra en ejecución.
+  - Debe **asignarse automáticamente al usuario `leitocodexbot`**.
+  - Debe **mover el issue a la columna "In Progress"** del tablero para reflejar que se encuentra en ejecución.
 - Cuando se indique que el agente debe **"buscar tareas"**, se refiere a que debe:
-    - Buscar todos los issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
-    - Ejecutarlos siguiendo los pasos definidos en este documento.
+  - Buscar todos los issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
+  - Ejecutarlos siguiendo los pasos definidos en este documento.
 - Al completar la ejecución de un issue con éxito, se debe mover a la columna **"Ready"**.
 - Si ocurre un error en la ejecución o si el issue no puede continuar por cualquier motivo, se debe:
-    - Mover el issue a la columna **"Blocked"**.
-    - Agregar un comentario explicando el motivo de la detención o el error.
-    - Crear uno o más **sub-issues** con tareas específicas que permitan resolver el bloqueo.
-    - Estos sub-issues deben ser movidos a la columna **"AutoBacklog"** del tablero.
-- Todos los repositorios involucrados están disponibles en el directorio `workspace`, cada uno en su carpeta correspondiente.
+  - Mover el issue a la columna **"Blocked"**.
+  - Agregar un comentario explicando el motivo de la detención o el error.
+  - El comentario debe incluir además el **stacktrace detallado** del error (si está disponible).
+  - El equipo humano deberá revisar manualmente la causa del bloqueo.
 - Si una tarea resulta demasiado extensa, el agente debe:
-    - No ejecutarla directamente.
-    - Crear **sub-issues** asociados para dividir el trabajo en partes manejables.
-    - Mover los sub-issues a la columna **"AutoBacklog"**.
-    - Mover el issue original a **"Blocked"** con un comentario explicativo.
-- **Tareas en estado `AutoBacklog`:**
-    - Son tareas que deben ser revisadas y priorizadas por el equipo humano.
-    - **No deben estar asignadas a ningún usuario.**
+  - No ejecutarla directamente.
+  - Mover el issue original a **"Blocked"** con un comentario explicativo sugiriendo dividir el trabajo.
+  - Incluir el stacktrace si es aplicable.
 - **Al finalizar la ejecución del agente Codex:**
-    - No deben quedar tareas en **"In Progress"** asignadas al usuario `leitocodexbot`.  
-      Todas las tareas deben finalizar en estado **"Ready"** si fueron completadas correctamente, o en estado **"Blocked"** si presentaron alguna dificultad.
-    - No deben quedar tareas en la columna **"Todo"**.  
-      Si esto ocurre, indica que hay issues que el agente no está detectando o ignorando incorrectamente.
+  - No deben quedar tareas en **"In Progress"** asignadas al usuario `leitocodexbot`.  
+    Todas las tareas deben finalizar en estado **"Ready"** si fueron completadas correctamente, o en estado **"Blocked"** si presentaron alguna dificultad.
+  - No deben quedar tareas en la columna **"Todo"**.  
+    Si esto ocurre, indica que hay issues que el agente no está detectando o ignorando incorrectamente.
 
 ---
 
