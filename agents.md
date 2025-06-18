@@ -34,6 +34,7 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
   - El detalle que se incluya en cada subissue debe ser lo suficientemente claro para que un desarrollador pueda entender qué se espera de él.
   - Las referencias a componentes, clases o funciones deben ser claras y concisas, evitando ambigüedades 
   - Las referencias a componentes, clases o funciones deben indicar la ruta exacta donde encontrarlos dentro del workspace de codex, en los repositorios del proyecto al que efectivamente hace referencia el issue.
+  - Las nuevas subtareas referidas a configuracion, pruebas o documentacion, tambien tienen que tener rutas exactas donde encontrarlas dentro del workspace de codex, en los repositorios del proyecto al que efectivamente hacen referencia.
   - Mover las nuevas tareas a la columna **"Backlog"** del tablero.
   - Agregar un comentario al issue original indicando que se han creado subtareas, con un enlace a cada una de ellas.
   - Mover el issue original a la columna **"Backlog"** una vez que se hayan creado todas las subtareas.
