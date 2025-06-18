@@ -26,6 +26,19 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
     - Agregar un comentario explicando el motivo de la detención o el error.
     - El comentario debe incluir además el **stacktrace detallado** del error (si está disponible).
     - El equipo humano deberá revisar manualmente la causa del bloqueo.
+- Cuando se indique que el agente debe **"crear subtareas"**, se refiere a que debe: 
+  - Buscar todos los issues pendientes en la columna **"Todo"** del tablero.
+  - Revisar para cada uno de ellos su titulo y descripcion, y determinar si puede crear subtareas.
+  - Teniendo en cuenta la documentacion proporcionada en la carpeta docs crear todos los sub-issues asociados a este issue principal para construir los componentes que sean necesarios para resolver la funcionalidad detallada
+  - Mover las nuevas tareas a la columna **"Backlog"** del tablero.
+  - Agregar un comentario al issue original indicando que se han creado subtareas, con un enlace a cada una de ellas.
+  - Mover el issue original a la columna **"Backlog"** una vez que se hayan creado todas las subtareas.
+- Buscar todos los issues pendientes en la columna **"Todo"** del tablero.
+  - Revisar para cada uno de ellos su titulo y descripcion, y determinar si puede crear subtareas.
+  - Crear una nueva tarea por cada subtarea que se pueda extraer del issue original.
+  - Asignar las nuevas tareas al usuario `leitocodexbot`.
+  - Mover las nuevas tareas a la columna **"Todo"** del tablero.
+  - Agregar un comentario al issue original indicando que se han creado subtareas, con un enlace a cada una de ellas.
 - **Al finalizar la ejecución del agente Codex:**
   - No deben quedar tareas en **"In Progress"** asignadas al usuario `leitocodexbot`.  
     Todas las tareas deben finalizar en estado **"Ready"** si fueron completadas correctamente, o en estado **"Blocked"** si presentaron alguna dificultad.
