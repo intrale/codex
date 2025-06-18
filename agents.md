@@ -25,8 +25,8 @@ El agente `leitocodexbot` debe tener en cuenta la siguiente estructura dentro de
 - Contiene **todo lo relacionado con el entorno Codex**.
 - **No incluye el código funcional de los módulos**, sino herramientas auxiliares, lógica de automatización y soporte general.
 - Dentro de este directorio, la carpeta **`docs/`** incluye:
-  - Documentación detallada sobre la arquitectura general.
-  - Descripción de funcionalidades y diseño de cada módulo.
+    - Documentación detallada sobre la arquitectura general.
+    - Descripción de funcionalidades y diseño de cada módulo.
 
 ### `/workspace/backend/`
 
@@ -38,9 +38,9 @@ El agente `leitocodexbot` debe tener en cuenta la siguiente estructura dentro de
 
 - Contiene la implementación de todos los **endpoints relacionados con usuarios, perfiles y negocios**.
 - El agente debe considerar este módulo para tareas de:
-  - Registro y autenticación de usuarios.
-  - Asignación y validación de roles.
-  - Registro y aprobación de negocios.
+    - Registro y autenticación de usuarios.
+    - Asignación y validación de roles.
+    - Registro y aprobación de negocios.
 
 ---
 
@@ -50,21 +50,21 @@ Cuando se indique que el agente debe **"ejecutar tareas"**, debe:
 
 1. Buscar todos los issues en la columna **"Todo"** del tablero.
 2. Para cada issue:
-  - Analizar el título y la descripción.
-  - Determinar si puede resolver la tarea automáticamente.
-  - Si puede:
-    - Mover a **"In Progress"**, asignar a `leitocodexbot`.
-    - Ejecutar los cambios requeridos.
-    - Comentar en el issue lo realizado.
-    - Mover a **"Ready"** si fue exitoso.
-  - Si no puede:
-    - Mover a **"Blocked"**.
-    - Comentar el motivo y adjuntar el **stacktrace** si aplica.
+    - Analizar el título y la descripción.
+    - Determinar si puede resolver la tarea automáticamente.
+    - Si puede:
+        - Mover a **"In Progress"**, asignar a `leitocodexbot`.
+        - Ejecutar los cambios requeridos.
+        - Comentar en el issue lo realizado.
+        - Mover a **"Ready"** si fue exitoso.
+    - Si no puede:
+        - Mover a **"Blocked"**.
+        - Comentar el motivo y adjuntar el **stacktrace** si aplica.
 
 3. Validaciones al finalizar:
-  - No debe haber issues asignados a `leitocodexbot` en **"In Progress"**.
-  - No debe haber issues en la columna **"Todo"**.
-  - Si quedan sin ejecutar, debe comentarse el motivo.
+    - No debe haber issues asignados a `leitocodexbot` en **"In Progress"**.
+    - No debe haber issues en la columna **"Todo"**.
+    - Si quedan sin ejecutar, debe comentarse el motivo.
 
 ---
 
@@ -75,12 +75,12 @@ Cuando se indique crear subtareas:
 1. Revisar todos los issues en **"Todo"**.
 2. Evaluar título y descripción para determinar viabilidad.
 3. Para funcionalidades complejas:
-  - Generar subtareas con prefijo `[subtask]`.
-  - Aplicar el principio de responsabilidad única (una tarea por objetivo).
-  - En cada subtarea:
-    - Indicar de forma clara y **técnica** el **nombre exacto** del componente, clase, función o endpoint involucrado.
-    - Incluir la **ruta completa** dentro del workspace para ubicar el componente (por ejemplo: `/workspace/users/src/domain/usecase/RegisterUserUseCase.kt`).
-    - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
+    - Generar subtareas con prefijo `[subtask]`.
+    - Aplicar el principio de responsabilidad única (una tarea por objetivo).
+    - En cada subtarea:
+        - Indicar de forma clara y **técnica** el **nombre exacto** del componente, clase, función o endpoint involucrado.
+        - Incluir la **ruta completa** dentro del workspace para ubicar el componente (por ejemplo: `/workspace/users/src/domain/usecase/RegisterUserUseCase.kt`).
+        - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
 4. Crear tareas separadas para pruebas, documentación y configuración si corresponde.
 5. Mover las subtareas a **"Backlog"**.
 6. Comentar en el issue original con enlaces a cada subtarea creada.
@@ -98,22 +98,24 @@ Cuando se indique que el agente debe **generar o actualizar documentación**, de
    `/workspace/codex/docs/`
 
 2. **Acciones permitidas:**
-  - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
-  - Actualizar documentos existentes si están dentro del directorio indicado.
+    - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
+    - Actualizar documentos existentes si están dentro del directorio indicado.
 
 3. **Restricciones:**
-  - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
-  - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
+    - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
+    - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
 
 4. **Buenas prácticas al documentar:**
-  - Incluir referencias claras al módulo o componente involucrado.
-  - Usar títulos, secciones y ejemplos para facilitar la comprensión.
-  - Indicar si la documentación está relacionada con un issue o PR (`Relacionado con #n`).
+    - Incluir referencias claras al módulo o componente involucrado.
+    - Usar títulos, secciones y ejemplos para facilitar la comprensión.
+    - Indicar si la documentación está relacionada con un issue o PR (`Relacionado con #n`).
 
-5. **Publicación en el issue o PR:**
-  - Comentar en el issue correspondiente con un resumen del contenido generado o actualizado.
-  - Incluir enlaces a los documentos modificados.
-  - Generar un Pull Request para revisión y aprobación de los cambios documentales.
+5. **Gestión del Pull Request:**
+    - Crear un **Pull Request automático** con el título `[auto][docs] Actualización de documentación`.
+    - Relacionar el PR con el issue correspondiente mediante `Closes #n`.
+    - Asignar el PR al usuario humano `leitolarreta`.
+    - Comentar en el issue correspondiente con un resumen de los cambios y un enlace al PR generado.
+    - ❌ **No hacer merge del PR automáticamente**.
 
 ---
 
