@@ -31,7 +31,8 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
   - Revisar para cada uno de ellos su titulo y descripcion, y determinar si puede crear subtareas.
   - Teniendo en cuenta la documentacion proporcionada en la carpeta docs crear todos los sub-issues asociados a este issue principal para construir los componentes que sean necesarios para resolver la funcionalidad detallada
   - El detalle que se incluya en cada subissue debe ser lo suficientemente claro para que un desarrollador pueda entender qué se espera de él.
-  - Las referencias a componentes, clases o funciones deben ser claras y concisas, evitando ambigüedades e indicando la ruta exacta donde encontrarlos.
+  - Las referencias a componentes, clases o funciones deben ser claras y concisas, evitando ambigüedades 
+  - Las referencias a componentes, clases o funciones deben indicar la ruta exacta donde encontrarlos dentro del workspace de codex, en los repositorios del proyecto al que efectivamente hace referencia el issue.
   - Mover las nuevas tareas a la columna **"Backlog"** del tablero.
   - Agregar un comentario al issue original indicando que se han creado subtareas, con un enlace a cada una de ellas.
   - Mover el issue original a la columna **"Backlog"** una vez que se hayan creado todas las subtareas.
@@ -74,7 +75,6 @@ Automatizar tareas repetitivas del ciclo de desarrollo: creación de código, ra
 - ❌ No realizar merges automáticos
 - ❌ No eliminar ramas remotas
 - ❌ No modificar archivos críticos sin aprobación explícita (`.env`, `settings.gradle`, etc.)
-- ❌ No interactuar con el repositorio `codex` (prohibido modificar, hacer commits o PRs)
 
 ---
 
