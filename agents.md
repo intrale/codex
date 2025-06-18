@@ -16,15 +16,16 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
 - Cuando se inicie el procesamiento de un issue:
   - Debe **asignarse automáticamente al usuario `leitocodexbot`**.
   - Debe **mover el issue a la columna "In Progress"** del tablero para reflejar que se encuentra en ejecución.
-- Cuando se indique que el agente debe **"buscar tareas"**, se refiere a que debe:
-  - Buscar todos los issues pendientes en las columnas **"Todo"** del tablero.
-  - Ejecutarlos siguiendo los pasos definidos en este documento.
-- Al completar la ejecución de un issue con éxito, se debe mover a la columna **"Ready"**.
-- Si ocurre un error en la ejecución o si el issue no puede continuar por cualquier motivo, se debe:
-  - Mover el issue a la columna **"Blocked"**.
-  - Agregar un comentario explicando el motivo de la detención o el error.
-  - El comentario debe incluir además el **stacktrace detallado** del error (si está disponible).
-  - El equipo humano deberá revisar manualmente la causa del bloqueo.
+- Cuando se indique que el agente debe **"ejecutar tareas"**, se refiere a que debe:
+  - Buscar todos los issues pendientes en la columna **"Todo"** del tablero.
+  - Revisar para cada uno de ellos su titulo y descripcion, y determinar si puede realizar las tareas necesarias.
+  - Ejecutar cada una de las tareas detalladas en el paso anterior.
+  - Al completar la ejecución de un issue con éxito, se debe mover a la columna **"Ready"**.
+  - Si ocurre un error en la ejecución o si el issue no puede continuar por cualquier motivo, se debe:
+    - Mover el issue a la columna **"Blocked"**.
+    - Agregar un comentario explicando el motivo de la detención o el error.
+    - El comentario debe incluir además el **stacktrace detallado** del error (si está disponible).
+    - El equipo humano deberá revisar manualmente la causa del bloqueo.
 - **Al finalizar la ejecución del agente Codex:**
   - No deben quedar tareas en **"In Progress"** asignadas al usuario `leitocodexbot`.  
     Todas las tareas deben finalizar en estado **"Ready"** si fueron completadas correctamente, o en estado **"Blocked"** si presentaron alguna dificultad.
