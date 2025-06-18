@@ -53,7 +53,7 @@ Cuando se indique que el agente debe **"ejecutar tareas"**, debe:
     - Analizar el título y la descripción.
     - Determinar si puede resolver la tarea automáticamente.
     - Si puede:
-        - Mover a **"In Progress"**, asignar a `leitocodexbot`.
+        - **Antes de ejecutar cualquier acción**, mover el issue a la columna **"In Progress"** y asignarlo a `leitocodexbot`.
         - Ejecutar los cambios requeridos.
         - Comentar en el issue lo realizado.
         - Mover a **"Ready"** si fue exitoso.
