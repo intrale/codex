@@ -30,6 +30,7 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
   - Buscar todos los issues pendientes en la columna **"Todo"** del tablero.
   - Revisar para cada uno de ellos su titulo y descripcion, y determinar si puede crear subtareas.
   - Teniendo en cuenta la documentacion proporcionada en la carpeta docs crear todos los sub-issues asociados a este issue principal para construir los componentes que sean necesarios para resolver la funcionalidad detallada
+  - Considerar el Single Responsibility Principle para crear subtareas que representen una única responsabilidad o tarea específica. No crear subtareas del estilo "documentacion y pruebas", deben ser tareas separadas.
   - El detalle que se incluya en cada subissue debe ser lo suficientemente claro para que un desarrollador pueda entender qué se espera de él.
   - Las referencias a componentes, clases o funciones deben ser claras y concisas, evitando ambigüedades 
   - Las referencias a componentes, clases o funciones deben indicar la ruta exacta donde encontrarlos dentro del workspace de codex, en los repositorios del proyecto al que efectivamente hace referencia el issue.
