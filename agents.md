@@ -76,12 +76,43 @@ Cuando se indique crear subtareas:
 2. Evaluar título y descripción para determinar viabilidad.
 3. Para funcionalidades complejas:
   - Generar subtareas con prefijo `[subtask]`.
-  - Aplicar el principio de responsabilidad única.
-  - Especificar rutas exactas dentro del workspace.
-  - Crear tareas separadas para pruebas, documentación y configuración.
-4. Mover las subtareas a **"Backlog"**.
-5. Comentar en el issue original con enlaces.
-6. Mover el issue original a **"Backlog"**.
+  - Aplicar el principio de responsabilidad única (una tarea por objetivo).
+  - En cada subtarea:
+    - Indicar de forma clara y **técnica** el **nombre exacto** del componente, clase, función o endpoint involucrado.
+    - Incluir la **ruta completa** dentro del workspace para ubicar el componente (por ejemplo: `/workspace/users/src/domain/usecase/RegisterUserUseCase.kt`).
+    - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
+4. Crear tareas separadas para pruebas, documentación y configuración si corresponde.
+5. Mover las subtareas a **"Backlog"**.
+6. Comentar en el issue original con enlaces a cada subtarea creada.
+7. Mover el issue original a **"Backlog"**.
+8. **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
+
+---
+
+## 📚 Generación y Actualización de Documentación
+
+Cuando se indique que el agente debe **generar o actualizar documentación**, debe:
+
+1. **Ubicación obligatoria:**  
+   Toda la documentación debe crearse o modificarse dentro del directorio:  
+   `/workspace/codex/docs/`
+
+2. **Acciones permitidas:**
+  - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
+  - Actualizar documentos existentes si están dentro del directorio indicado.
+
+3. **Restricciones:**
+  - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
+  - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
+
+4. **Buenas prácticas al documentar:**
+  - Incluir referencias claras al módulo o componente involucrado.
+  - Usar títulos, secciones y ejemplos para facilitar la comprensión.
+  - Indicar si la documentación está relacionada con un issue o PR (`Relacionado con #n`).
+
+5. **Publicación en el issue o PR:**
+  - Comentar en el issue correspondiente con un resumen del contenido generado o actualizado.
+  - Incluir enlaces a los documentos modificados.
 
 ---
 
