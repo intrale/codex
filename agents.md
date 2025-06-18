@@ -113,6 +113,7 @@ Cuando se indique que el agente debe **generar o actualizar documentación**, de
 5. **Publicación en el issue o PR:**
   - Comentar en el issue correspondiente con un resumen del contenido generado o actualizado.
   - Incluir enlaces a los documentos modificados.
+  - Generar un Pull Request para revisión y aprobación de los cambios documentales.
 
 ---
 
