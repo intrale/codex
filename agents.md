@@ -17,7 +17,7 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
   - Debe **asignarse automáticamente al usuario `leitocodexbot`**.
   - Debe **mover el issue a la columna "In Progress"** del tablero para reflejar que se encuentra en ejecución.
 - Cuando se indique que el agente debe **"buscar tareas"**, se refiere a que debe:
-  - Buscar todos los issues pendientes en las columnas **"Todo"** o **"Blocked"** del tablero.
+  - Buscar todos los issues pendientes en las columnas **"Todo"** del tablero.
   - Ejecutarlos siguiendo los pasos definidos en este documento.
 - Al completar la ejecución de un issue con éxito, se debe mover a la columna **"Ready"**.
 - Si ocurre un error en la ejecución o si el issue no puede continuar por cualquier motivo, se debe:
@@ -25,10 +25,6 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
   - Agregar un comentario explicando el motivo de la detención o el error.
   - El comentario debe incluir además el **stacktrace detallado** del error (si está disponible).
   - El equipo humano deberá revisar manualmente la causa del bloqueo.
-- Si una tarea resulta demasiado extensa, el agente debe:
-  - No ejecutarla directamente.
-  - Mover el issue original a **"Blocked"** con un comentario explicativo sugiriendo dividir el trabajo.
-  - Incluir el stacktrace si es aplicable.
 - **Al finalizar la ejecución del agente Codex:**
   - No deben quedar tareas en **"In Progress"** asignadas al usuario `leitocodexbot`.  
     Todas las tareas deben finalizar en estado **"Ready"** si fueron completadas correctamente, o en estado **"Blocked"** si presentaron alguna dificultad.
@@ -80,10 +76,10 @@ Automatizar tareas repetitivas del ciclo de desarrollo: creación de código, ra
 ## 📦 Pull Requests generados por `leitocodexbot`
 
 - Título con prefijo `[auto]`
-- Descripción técnica clara en el cuerpo del PR
-- Asociado al issue que origina el cambio
+- Descripción técnica clara en el cuerpo del PR asociado al issue que origina el cambio
 - Asignado al revisor humano `leitolarreta`
 - Sin acción de merge por parte del agente
+- Comentar el issue relacionado en el tablero de proyecto con el link al PR generado
 
 ---
 
