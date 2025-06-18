@@ -29,6 +29,7 @@ Se utiliza un agente personalizado, identificado en GitHub como `leitocodexbot`,
 - Cuando se indique que el agente debe **"crear subtareas"**, se refiere a que debe: 
   - Buscar todos los issues pendientes en la columna **"Todo"** del tablero.
   - Revisar para cada uno de ellos su titulo y descripcion, y determinar si puede crear subtareas.
+  - El titulo de las subtareas debe comenzar con [subtask]
   - Teniendo en cuenta la documentacion proporcionada en la carpeta docs crear todos los sub-issues asociados a este issue principal para construir los componentes que sean necesarios para resolver la funcionalidad detallada
   - Considerar el Single Responsibility Principle para crear subtareas que representen una única responsabilidad o tarea específica. No crear subtareas del estilo "documentacion y pruebas", deben ser tareas separadas.
   - El detalle que se incluya en cada subissue debe ser lo suficientemente claro para que un desarrollador pueda entender qué se espera de él.
