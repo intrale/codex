@@ -26,22 +26,26 @@ if [ -d /workspace/codex/.git ]; then
   fi
 fi
 
-# Verificación de acceso a Projects v2 con GraphQL
+# Verificación de acceso a Projects v2 con GraphQL (versión escapada correcta)
 echo "🔎 Verificando acceso al Project v2 de la organización 'intrale'..."
 
-graphql_query='{
-  organization(login: "intrale") {
-    projectV2(number: 1) {
-      id
-      title
+read -r -d '' graphql_query << EOM
+{
+  "query": "{
+    organization(login: \\\"intrale\\\") {
+      projectV2(number: 1) {
+        id
+        title
+      }
     }
-  }
-}'
+  }"
+}
+EOM
 
 response=$(curl -s -X POST https://api.github.com/graphql \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Content-Type: application/json" \
-  -d "{\"query\": \"$graphql_query\"}")
+  -d "$graphql_query")
 
 if echo "$response" | grep -q '"id"'; then
   echo "✅ Acceso correcto al proyecto v2 de 'intrale'."
