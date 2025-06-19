@@ -41,11 +41,15 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
 2. **Verificación de asignación de PR**
     - El agente debe confirmar que puede asignar correctamente un Pull Request al usuario `leitolarreta`.
 
+3. **Chequeo de autenticación de GitHub CLI**
+    - El agente debe ejecutar `gh auth status` y verificar que existe una sesión activa.
+    - Si el estado indica que no hay autenticación válida, debe asumir que no puede operar.
+
 ### ❌ Si alguna validación falla:
 - El agente debe **crear automáticamente una issue** con el título:  
   `⚠️ Problema de entorno detectado: imposibilidad de generar PRs`
 - En la descripción debe incluir:
-    - Qué validación falló (creación de PR o asignación).
+    - Qué validación falló (creación de PR, asignación o autenticación).
     - Detalles técnicos del error recibido (mensaje o stacktrace).
     - Hora y contexto de la ejecución.
 - Debe mover esta issue a la columna **"Todo"**.
@@ -169,7 +173,7 @@ Toda issue o sub-issue que sea creada automáticamente por el agente `leitocodex
 - ## 📘 Notas técnicas
   Guía para la implementación, consideraciones de estilo o decisiones de diseño/código específicas.
 
-> 📌 Esta estructura debe aplicarse **en todas las tareas** generadas automáticamente, incluyendo subtareas de refinamiento.
+> 📌 Esta estructura debe aplicarse **en todas las tareas** generadas automáticamente, incluyendo subtareas de refinamiento.  
 > El contenido debe ser claro, técnico y sin ambigüedades, para facilitar su comprensión por cualquier desarrollador.
 
 ---
@@ -261,4 +265,4 @@ El agente `leitocodexbot` es un asistente automatizado que potencia la eficienci
 Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y fluidez en el desarrollo.  
 **Toda ejecución que implique cambios debe generar obligatoriamente un Pull Request.**  
 **Toda tarea que no pueda moverse a "In Progress" debe bloquearse de inmediato con su motivo técnico.**  
-**Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs y asignarlos correctamente.**
+**Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs, asignarlos correctamente y confirmar la autenticación activa del entorno.**
