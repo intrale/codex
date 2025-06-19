@@ -2,7 +2,7 @@
 
 # Asegurarse de que la variable $GITHUB_TOKEN esté definida en el entorno de Codex
 if [[ -z "$GITHUB_TOKEN" ]]; then
-  echo "Error: GITHUB_TOKEN no está definido"
+  echo "❌ Error: GITHUB_TOKEN no está definido"
   exit 1
 fi
 
@@ -26,17 +26,27 @@ if [ -d /workspace/codex/.git ]; then
   fi
 fi
 
-# Verificación de acceso al proyecto clásico intrale/projects/1 usando curl
-echo "🔎 Verificando acceso al tablero intrale/projects/1 con curl..."
+# Verificación de acceso a Projects v2 con GraphQL
+echo "🔎 Verificando acceso al Project v2 de la organización 'intrale'..."
 
-columns=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-                 -H "Accept: application/vnd.github.inertia-preview+json" \
-                 https://api.github.com/projects/1/columns)
+graphql_query='{
+  organization(login: "intrale") {
+    projectV2(number: 1) {
+      id
+      title
+    }
+  }
+}'
 
-if echo "$columns" | grep -q '"name": "Todo"'; then
-  echo "✅ Acceso correcto al proyecto 'intrale', columna 'Todo' encontrada."
+response=$(curl -s -X POST https://api.github.com/graphql \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"query\": \"$graphql_query\"}")
+
+if echo "$response" | grep -q '"id"'; then
+  echo "✅ Acceso correcto al proyecto v2 de 'intrale'."
 else
-  echo "❌ No se pudo acceder correctamente al proyecto o no se encontró la columna 'Todo'."
-  echo "$columns"
+  echo "❌ No se pudo acceder correctamente al proyecto v2 de 'intrale'."
+  echo "$response"
   exit 1
 fi

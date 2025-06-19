@@ -48,18 +48,22 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
       ```
     - Si la respuesta no contiene un campo `"login"` válido, se debe asumir que el token no es funcional.
 
-4. **Verificación de acceso al tablero de proyecto**
-    - El agente debe acceder correctamente al tablero clásico de GitHub ubicado en:  
+4. **Verificación de acceso al tablero de proyecto (Projects v2)**
+    - El agente debe verificar el acceso al proyecto v2 de GitHub ubicado en:  
       `https://github.com/orgs/intrale/projects/1`
-    - Para hacerlo, debe utilizar para obtener las columnas del proyecto:
+    - Para hacerlo, debe ejecutar el siguiente query GraphQL con `curl`:
       ```bash
-      curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.inertia-preview+json" https://api.github.com/projects/1/columns
-    - Verificar que la columna `"Todo"` exista.
-    - Si no puede acceder o no encuentra la columna `"Todo"`:
+      curl -s -X POST https://api.github.com/graphql \
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{"query": "{ organization(login: \"intrale\") { projectV2(number: 1) { id title } } }"}'
+      ```
+    - Si la respuesta contiene un campo `"id"` y `"title"`, se asume acceso correcto.
+    - Si no puede acceder o la respuesta es inválida:
         - El agente debe crear un issue titulado:  
           `⚠️ No se puede acceder al tablero intrale/projects/1`
         - En la descripción debe incluir:
-            - El endpoint al que intentó acceder.
+            - El query utilizado.
             - El mensaje de error recibido o respuesta vacía.
             - El contexto actual del entorno (nombre del repositorio activo, branch, etc.)
         - Debe mover esta issue a la columna `"Todo"` y asignarla a `leitolarreta`.
