@@ -41,17 +41,19 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
 2. **Verificación de asignación de PR**
     - El agente debe confirmar que puede asignar correctamente un Pull Request al usuario `leitolarreta`.
 
-3. **Chequeo de autenticación de GitHub CLI**
-    - El agente debe ejecutar `gh auth status` y verificar que existe una sesión activa.
-    - Si el estado indica que no hay autenticación válida, debe asumir que no puede operar.
+3. **Chequeo de validez del `GITHUB_TOKEN`**
+    - El agente debe ejecutar una solicitud de prueba con `curl` usando el token:
+      ```bash
+      curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/user
+      ```
+    - Si la respuesta no contiene un campo `"login"` válido, se debe asumir que el token no es funcional.
 
 4. **Verificación de acceso al tablero de proyecto**
     - El agente debe acceder correctamente al tablero clásico de GitHub ubicado en:  
       `https://github.com/orgs/intrale/projects/1`
-    - Para hacerlo, debe utilizar la API REST de GitHub con el encabezado:  
-      `Accept: application/vnd.github.inertia-preview+json`
-    - Debe obtener la lista de columnas con:  
-      `GET /projects/1/columns`
+    - Para hacerlo, debe utilizar para obtener las columnas del proyecto:
+      ```bash
+      curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.inertia-preview+json" https://api.github.com/projects/1/columns
     - Verificar que la columna `"Todo"` exista.
     - Si no puede acceder o no encuentra la columna `"Todo"`:
         - El agente debe crear un issue titulado:  
@@ -113,9 +115,12 @@ Cuando se indique que el agente debe **"trabajar"**, debe:
 ---
 
 ## 🔄 Generación de Pull Requests al ejecutar tareas
+Tener en cuenta que los Pull Requests deben generarse con 
+curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" \
+-d '{"title":"<titulo>","head":"<rama>","base":"main","body":"Closes #<issue_number>"}' \
+https://api.github.com/repos/intrale/<repo>/pulls
 
 Siempre que la ejecución de una tarea involucre cambios en el código fuente o documentación, el agente debe:
-
 1. Crear una nueva rama usando el prefijo adecuado (`feature/`, `bugfix/`, `refactor/`, `docs/`) y un nombre descriptivo.
 2. Realizar los commits correspondientes en esa rama.
 3. Intentar generar automáticamente un Pull Request con las siguientes características:
