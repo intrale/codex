@@ -10,3 +10,8 @@ fi
 git clone https://github.com/intrale/app.git ../app
 git clone https://github.com/intrale/backend.git ../backend
 git clone https://github.com/intrale/users.git ../users
+
+# Se otorgan permisos a gradle
+chmod +x ../app/gradlew
+chmod +x ../backend/gradlew
+chmod +x ../users/gradlew

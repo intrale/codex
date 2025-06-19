@@ -15,44 +15,41 @@ Este documento define la configuración y comportamiento esperado del agente aut
 - Organización y tablero objetivo en GitHub: **`intrale`**
 - Toda tarea debe estar relacionada con un **issue** existente en el tablero.
 - Toda tarea se considera **"Ready"** cuando:
-  - Se ha creado un Pull Request (PR) asociado.
-  - El PR está asignado al usuario `leitolarreta`.
-  - El issue está vinculado al PR mediante `Closes #<número de issue>`.
+    - Se ha creado un Pull Request (PR) asociado.
+    - El PR está asignado al usuario `leitolarreta`.
+    - El issue está vinculado al PR mediante `Closes #<número de issue>`.
+- Si no se genera un Pull Request, la tarea se considera **incompleta**, incluso si los cambios fueron aplicados localmente.
 - Toda tarea que finalice con éxito debe:
-  - Mover el issue a la columna **"Ready"**.
-  - Comentar en el issue con un resumen de lo realizado y un enlace al PR generado.
+    - Mover el issue a la columna **"Ready"**.
+    - Comentar en el issue con un resumen de lo realizado y un enlace al PR generado.
 - Toda tarea que no pueda completarse debe:
-  - Mover el issue a la columna **"Blocked"**.
-  - Comentar el motivo del bloqueo y adjuntar el **stacktrace** si aplica.
+    - Mover el issue a la columna **"Blocked"**.
+    - Comentar el motivo del bloqueo y adjuntar el **stacktrace** si aplica.
 - No puede haber issues asignados a `leitocodexbot` en la columna **"In Progress"** al finalizar una ejecución de tareas.
+
 ---
 
 ## 🗂️ Estructura del Workspace y Reglas de Interpretación
 
-El agente `leitocodexbot` debe tener en cuenta la siguiente estructura dentro del entorno de desarrollo para poder ejecutar tareas, crear subtareas, entender el contexto de los módulos y realizar pruebas adecuadamente:
-
 ### `/workspace/codex/`
-
 - Contiene **todo lo relacionado con el entorno Codex**.
 - **No incluye el código funcional de los módulos**, sino herramientas auxiliares, lógica de automatización y soporte general.
 - Dentro de este directorio, la carpeta **`docs/`** incluye:
-   - Documentación detallada sobre la arquitectura general.
-   - Descripción de funcionalidades y diseño de cada módulo.
-   - Considerar todos los documentos en esta carpeta como referencia para entender el contexto del proyecto.
+    - Documentación detallada sobre la arquitectura general.
+    - Descripción de funcionalidades y diseño de cada módulo.
+    - Considerar todos los documentos en esta carpeta como referencia para entender el contexto del proyecto.
 
 ### `/workspace/backend/`
-
 - Contiene el **código base y común a todos los módulos**.
 - Este código es **heredado o reutilizado** por los módulos funcionales.
 - Antes de desarrollar funcionalidades o generar pruebas unitarias en otros módulos, el agente debe **entender este código base**.
 
 ### `/workspace/users/`
-
 - Contiene la implementación de todos los **endpoints relacionados con usuarios, perfiles y negocios**.
 - El agente debe considerar este módulo para tareas de:
-   - Registro y autenticación de usuarios.
-   - Asignación y validación de roles.
-   - Registro y aprobación de negocios.
+    - Registro y autenticación de usuarios.
+    - Asignación y validación de roles.
+    - Registro y aprobación de negocios.
 
 ---
 
@@ -62,45 +59,52 @@ Cuando se indique que el agente debe **"trabajar"**, debe:
 
 1. Buscar todos los issues en la columna **"Todo"** del tablero.
 2. Para cada issue:
-   - Mover a **"In Progress"**.
-   - Analizar el título y la descripción.
-   - Determinar si puede resolver la tarea automáticamente.
-   - Si puede:
-      - Asignarlo a `leitocodexbot`.
-      - Crear una rama con el nombre relaccionado al issue.
-      - Ejecutar los cambios requeridos.
-      - Realizar comentarios parciales de progreso en el issue a medida que avanza.
-      - Comentar en el issue lo realizado.
-      - Generar un Pull Request con los cambios realizados.
-      - Mover a **"Ready"** si fue exitoso.
-      - Mover a **"Blocked"** si no pudo completarlo.
-   - Si no puede:
-      - Mover a **"Blocked"**.
-      - Comentar el motivo y adjuntar el **stacktrace** si aplica.
+    - Intentar mover a **"In Progress"**.
+    - Si no puede moverlo por cualquier motivo (permisos, estructura, inconsistencia del issue, error interno), debe:
+        - Mover la tarea a **"Blocked"** inmediatamente.
+        - Comentar el motivo completo del fallo, incluyendo cualquier error técnico o condición encontrada.
+        - Esto garantiza que cualquier observador del tablero pueda ver en tiempo real el intento y su resultado.
+    - Si logra moverlo:
+        - Analizar el título y la descripción.
+        - Determinar si puede resolver la tarea automáticamente.
+        - Si puede:
+            - Asignarlo a `leitocodexbot`.
+            - Crear una rama con el nombre relacionado al issue.
+            - Ejecutar los cambios requeridos (ya sean de código, pruebas o documentación).
+            - Realizar comentarios parciales de progreso en el issue.
+            - Comentar en el issue lo realizado.
+            - Generar **obligatoriamente** un Pull Request con los cambios realizados y asignarlo a `leitolarreta`.
+            - Si no se puede generar el PR, mover la tarea a **"Blocked"** con la justificación técnica.
+            - Mover a **"Ready"** solo si el Pull Request fue creado correctamente.
+        - Si no puede resolverla:
+            - Mover a **"Blocked"**.
+            - Comentar el motivo y adjuntar el **stacktrace** si aplica.
 
 3. Validaciones al finalizar:
-   - No debe haber issues asignados a `leitocodexbot` en **"In Progress"**.
-   - No debe haber issues en la columna **"Todo"**.
-   - Si quedan sin ejecutar, debe comentarse el motivo.
+    - No debe haber issues asignados a `leitocodexbot` en **"In Progress"**.
+    - No debe haber issues en la columna **"Todo"**.
+    - Si quedan sin ejecutar, debe comentarse el motivo.
 
-### 🔄 Generación de Pull Requests al ejecutar tareas
+> 📌 Si no se genera un Pull Request, la tarea se considerará incompleta, incluso si los cambios fueron aplicados localmente.
+
+---
+
+## 🔄 Generación de Pull Requests al ejecutar tareas
 
 Siempre que la ejecución de una tarea involucre cambios en el código fuente o documentación, el agente debe:
 
 1. Crear una nueva rama usando el prefijo adecuado (`feature/`, `bugfix/`, `refactor/`, `docs/`) y un nombre descriptivo.
 2. Realizar los commits correspondientes en esa rama.
 3. Generar automáticamente un Pull Request con las siguientes características:
-   - Título: `[auto] <descripción breve del cambio realizado>`
-   - Descripción técnica clara y directa.
-   - Referencia al issue mediante `Closes #<número de issue>`.
-   - Asignado al usuario `leitolarreta`.
+    - Título: `[auto] <descripción breve del cambio realizado>`
+    - Descripción técnica clara y directa.
+    - Referencia al issue mediante `Closes #<número de issue>`.
+    - Asignado al usuario `leitolarreta`.
 4. Comentar en el issue ejecutado indicando:
-   - Qué se hizo.
-   - Enlace directo al PR creado.
-5. **No debe hacer merge del PR automáticamente.**
+    - Qué se hizo.
+    - Enlace directo al PR creado.
+5. ❌ **No debe hacer merge del PR automáticamente.**
 6. Solo debe mover el issue a **"Ready"** si el Pull Request fue creado correctamente.
-
-> 📌 Si no se genera un Pull Request, la tarea se considerará incompleta, incluso si los cambios fueron aplicados localmente.
 
 ---
 
@@ -110,19 +114,47 @@ Cuando se indique que el agente debe **"refinar"**, debe:
 
 1. Revisar todos los issues en **"Todo"**.
 2. Mover el issue a **"In Progress"**.
-2. Evaluar título y descripción para determinar viabilidad.
-3. Para funcionalidades complejas:
-   - Generar subtareas con prefijo `[subtask]`.
-   - Aplicar el principio de responsabilidad única (una tarea por objetivo).
-   - En cada subtarea:
-      - Indicar de forma clara y **técnica** el **nombre exacto** del componente, clase, función o endpoint involucrado.
-      - Incluir la **ruta completa** dentro del workspace para ubicar el componente (por ejemplo: `/workspace/users/src/domain/usecase/RegisterUserUseCase.kt`).
-      - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
-4. Crear tareas separadas para pruebas, documentación y configuración si corresponde.
-5. Mover las subtareas a **"Backlog"**.
-6. Agregar a la descripcion del issue original los enlaces a cada subtarea creada.
-7. Mover el issue original a **"Backlog"**.
-8. **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
+    - Si no se puede mover por cualquier motivo, se debe pasar a **"Blocked"** e indicar claramente el error técnico o motivo específico del rechazo.
+3. Evaluar título y descripción para determinar viabilidad.
+4. Para funcionalidades complejas:
+    - Generar subtareas con prefijo `[subtask]`.
+    - Aplicar el principio de responsabilidad única (una tarea por objetivo).
+    - En cada subtarea:
+        - Indicar de forma clara y **técnica** el **nombre exacto** del componente, clase, función o endpoint involucrado.
+        - Incluir la **ruta completa** dentro del workspace para ubicar el componente (por ejemplo: `/workspace/users/src/domain/usecase/RegisterUserUseCase.kt`).
+        - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
+        - Redactar la descripción utilizando la estructura estándar definida en la sección **📝 Estructura de Issues Generadas Automáticamente**.
+5. Crear tareas separadas para pruebas, documentación y configuración si corresponde.
+6. Mover las subtareas a **"Backlog"**.
+7. Agregar a la descripción del issue original los enlaces a cada subtarea creada.
+8. Mover el issue original a **"Backlog"**.
+9. **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
+
+---
+
+## 📝 Estructura de Issues Generadas Automáticamente
+
+Toda issue o sub-issue que sea creada automáticamente por el agente `leitocodexbot` debe seguir una estructura estandarizada en **Español Latinoamericano**, respetando el siguiente formato:
+
+#### ✅ Estructura:
+
+- ## 🎯 Objetivo
+  Breve descripción del propósito de la tarea o funcionalidad.
+
+- ## 🧠 Contexto
+  Antecedentes relevantes o descripción del comportamiento actual.
+
+- ## 🔧 Cambios requeridos
+  Lista de acciones, componentes y archivos involucrados que deben modificarse.
+
+- ## ✅ Criterios de aceptación
+  Requisitos funcionales claros que deben cumplirse para considerar la tarea finalizada.
+
+- ## 📘 Notas técnicas
+  Guía para la implementación, consideraciones de estilo o decisiones de diseño/código específicas.
+
+> 📌 Esta estructura debe aplicarse **en todas las tareas** generadas automáticamente, incluyendo subtareas de refinamiento.
+> El contenido debe ser claro, técnico y sin ambigüedades, para facilitar su comprensión por cualquier desarrollador.
 
 ---
 
@@ -135,24 +167,24 @@ Cuando el agente genera o actualiza documentación, debe:
    `/workspace/codex/docs/`
 
 2. **Acciones permitidas:**
-   - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
-   - Actualizar documentos existentes si están dentro del directorio indicado.
+    - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
+    - Actualizar documentos existentes si están dentro del directorio indicado.
 
 3. **Restricciones:**
-   - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
-   - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
+    - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
+    - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
 
 4. **Buenas prácticas al documentar:**
-   - Incluir referencias claras al módulo o componente involucrado.
-   - Usar títulos, secciones y ejemplos para facilitar la comprensión.
-   - Indicar si la documentación está relacionada con un issue o PR (`Relacionado con #n`).
+    - Incluir referencias claras al módulo o componente involucrado.
+    - Usar títulos, secciones y ejemplos para facilitar la comprensión.
+    - Indicar si la documentación está relacionada con un issue o PR (`Relacionado con #n`).
 
 5. **Gestión del Pull Request:**
-   - Crear un **Pull Request automático** con el título `[auto][docs] Actualización de documentación`.
-   - Relacionar el PR con el issue correspondiente mediante `Closes #n`.
-   - Asignar el PR al usuario humano `leitolarreta`.
-   - Comentar en el issue correspondiente con un resumen de los cambios y un enlace al PR generado.
-   - ❌ **No hacer merge del PR automáticamente**.
+    - Crear un **Pull Request automático** con el título `[auto][docs] Actualización de documentación`.
+    - Relacionar el PR con el issue correspondiente mediante `Closes #n`.
+    - Asignar el PR al usuario humano `leitolarreta`.
+    - Comentar en el issue correspondiente con un resumen de los cambios y un enlace al PR generado.
+    - ❌ **No hacer merge del PR automáticamente**.
 
 ---
 
@@ -175,13 +207,14 @@ Automatizar tareas operativas: generación de código, ramas, PRs, comentarios, 
 - Titular PRs con `[auto]`.
 - Evitar alterar archivos binarios o sensibles.
 - Ramas con nombres claros y descriptivos.
-- Cuando se generen pruebas unitarias, revisar el resultado de cobertura de codigo y en caso de que se alcance un valor superior a la cobertura mínima requerida, ajustar la configuracion del proyecto para que utilice el nuevo valor y generar un comentario en el issue indicando el porcentaje alcanzado.
+- Cuando se generen pruebas unitarias, revisar el resultado de cobertura de código y en caso de que se alcance un valor superior a la cobertura mínima requerida, ajustar la configuración del proyecto para que utilice el nuevo valor y generar un comentario en el issue indicando el porcentaje alcanzado.
 
 ### Restricciones
 - ❌ No hacer merges automáticos.
 - ❌ No eliminar ramas remotas.
 - ❌ No modificar archivos críticos sin aprobación (`.env`, `settings.gradle`, etc.)
-- ❌ No se puede modificar la configuracion de cobertura de codigo por un valor inferior al actual para ningun modulo.- 
+- ❌ No se puede modificar la configuración de cobertura de código por un valor inferior al actual para ningún módulo.
+
 ---
 
 ## 🌱 Nomenclatura de Ramas
@@ -209,4 +242,6 @@ Automatizar tareas operativas: generación de código, ramas, PRs, comentarios, 
 ## ✅ Consideraciones Finales
 
 El agente `leitocodexbot` es un asistente automatizado que potencia la eficiencia del equipo, pero **nunca reemplaza la revisión ni la decisión humana**.  
-Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y fluidez en el desarrollo.
+Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y fluidez en el desarrollo.  
+**Toda ejecución que implique cambios debe generar obligatoriamente un Pull Request.**  
+**Toda tarea que no pueda moverse a "In Progress" debe bloquearse de inmediato con su motivo técnico.**
