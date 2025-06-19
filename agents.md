@@ -13,7 +13,18 @@ Este documento define la configuración y comportamiento esperado del agente aut
 - Todos los comentarios, commits y PRs deben estar en **Español Latinoamericano**.
 - El entorno cuenta con `GITHUB_TOKEN` con permisos sobre toda la organización.
 - Organización y tablero objetivo en GitHub: **`intrale`**
-
+- Toda tarea debe estar relacionada con un **issue** existente en el tablero.
+- Toda tarea se considera **"Ready"** cuando:
+  - Se ha creado un Pull Request (PR) asociado.
+  - El PR está asignado al usuario `leitolarreta`.
+  - El issue está vinculado al PR mediante `Closes #<número de issue>`.
+- Toda tarea que finalice con éxito debe:
+  - Mover el issue a la columna **"Ready"**.
+  - Comentar en el issue con un resumen de lo realizado y un enlace al PR generado.
+- Toda tarea que no pueda completarse debe:
+  - Mover el issue a la columna **"Blocked"**.
+  - Comentar el motivo del bloqueo y adjuntar el **stacktrace** si aplica.
+- No puede haber issues asignados a `leitocodexbot` en la columna **"In Progress"** al finalizar una ejecución de tareas.
 ---
 
 ## 🗂️ Estructura del Workspace y Reglas de Interpretación
@@ -27,6 +38,7 @@ El agente `leitocodexbot` debe tener en cuenta la siguiente estructura dentro de
 - Dentro de este directorio, la carpeta **`docs/`** incluye:
    - Documentación detallada sobre la arquitectura general.
    - Descripción de funcionalidades y diseño de cada módulo.
+   - Considerar todos los documentos en esta carpeta como referencia para entender el contexto del proyecto.
 
 ### `/workspace/backend/`
 
@@ -46,17 +58,22 @@ El agente `leitocodexbot` debe tener en cuenta la siguiente estructura dentro de
 
 ## 🔁 Ejecución de Tareas Automáticas
 
-Cuando se indique que el agente debe **"ejecutar tareas"**, debe:
+Cuando se indique que el agente debe **"trabajar"**, debe:
 
 1. Buscar todos los issues en la columna **"Todo"** del tablero.
 2. Para cada issue:
+   - Mover a **"In Progress"**.
    - Analizar el título y la descripción.
    - Determinar si puede resolver la tarea automáticamente.
    - Si puede:
-      - **Antes de ejecutar cualquier acción**, mover el issue a la columna **"In Progress"** y asignarlo a `leitocodexbot`.
+      - Asignarlo a `leitocodexbot`.
+      - Crear una rama con el nombre relaccionado al issue.
       - Ejecutar los cambios requeridos.
+      - Realizar comentarios parciales de progreso en el issue a medida que avanza.
       - Comentar en el issue lo realizado.
+      - Generar un Pull Request con los cambios realizados.
       - Mover a **"Ready"** si fue exitoso.
+      - Mover a **"Blocked"** si no pudo completarlo.
    - Si no puede:
       - Mover a **"Blocked"**.
       - Comentar el motivo y adjuntar el **stacktrace** si aplica.
@@ -89,9 +106,10 @@ Siempre que la ejecución de una tarea involucre cambios en el código fuente o 
 
 ## 🔹 Creación de Subtareas
 
-Cuando se indique crear subtareas:
+Cuando se indique que el agente debe **"refinar"**, debe:
 
 1. Revisar todos los issues en **"Todo"**.
+2. Mover el issue a **"In Progress"**.
 2. Evaluar título y descripción para determinar viabilidad.
 3. Para funcionalidades complejas:
    - Generar subtareas con prefijo `[subtask]`.
@@ -102,7 +120,7 @@ Cuando se indique crear subtareas:
       - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
 4. Crear tareas separadas para pruebas, documentación y configuración si corresponde.
 5. Mover las subtareas a **"Backlog"**.
-6. Comentar en el issue original con enlaces a cada subtarea creada.
+6. Agregar a la descripcion del issue original los enlaces a cada subtarea creada.
 7. Mover el issue original a **"Backlog"**.
 8. **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
 
@@ -110,7 +128,7 @@ Cuando se indique crear subtareas:
 
 ## 📚 Generación y Actualización de Documentación
 
-Cuando se indique que el agente debe **generar o actualizar documentación**, debe:
+Cuando el agente genera o actualiza documentación, debe:
 
 1. **Ubicación obligatoria:**  
    Toda la documentación debe crearse o modificarse dentro del directorio:  
@@ -157,12 +175,13 @@ Automatizar tareas operativas: generación de código, ramas, PRs, comentarios, 
 - Titular PRs con `[auto]`.
 - Evitar alterar archivos binarios o sensibles.
 - Ramas con nombres claros y descriptivos.
+- Cuando se generen pruebas unitarias, revisar el resultado de cobertura de codigo y en caso de que se alcance un valor superior a la cobertura mínima requerida, ajustar la configuracion del proyecto para que utilice el nuevo valor y generar un comentario en el issue indicando el porcentaje alcanzado.
 
 ### Restricciones
 - ❌ No hacer merges automáticos.
 - ❌ No eliminar ramas remotas.
 - ❌ No modificar archivos críticos sin aprobación (`.env`, `settings.gradle`, etc.)
-
+- ❌ No se puede modificar la configuracion de cobertura de codigo por un valor inferior al actual para ningun modulo.- 
 ---
 
 ## 🌱 Nomenclatura de Ramas
