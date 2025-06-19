@@ -46,3 +46,12 @@ echo "📦 Clonando repositorios de Codex..."
 chmod +x ../app/gradlew
 chmod +x ../backend/gradlew
 chmod +x ../users/gradlew
+
+# Asegurarse de que /workspace/codex tenga remoto configurado si es un repo válido
+if [ -d /workspace/codex/.git ]; then
+  cd /workspace/codex
+  if ! git remote get-url origin > /dev/null 2>&1; then
+    echo "⚠️ Agregando remote origin a /workspace/codex"
+    git remote add origin https://github.com/intrale/codex.git
+  fi
+fi
