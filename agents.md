@@ -49,37 +49,24 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
     - Si la respuesta no contiene un campo `"login"` válido, se debe asumir que el token no es funcional.
 
 4. **Verificación de acceso al tablero de proyecto (Projects v2 con GraphQL)**
-    - El agente debe verificar acceso al tablero de tipo `Projects v2` ubicado en:  
+    - El agente debe verificar el acceso al tablero moderno (`Projects v2`) ubicado en:  
       `https://github.com/orgs/intrale/projects/1`
-    - Para ello, debe ejecutar el siguiente query GraphQL de forma segura (usando `curl` con contenido escapado correctamente):
+    - Para ello, debe ejecutar el siguiente comando `curl`, correctamente escapado, usando la variable de entorno `GITHUB_TOKEN`:
       ```bash
-      read -r -d '' graphql_query << EOM
-      {
-        "query": "{
-          organization(login: \\\"intrale\\\") {
-            projectV2(number: 1) {
-              id
-              title
-            }
-          }
-        }"
-      }
-      EOM
-
       curl -s -X POST https://api.github.com/graphql \
-        -H \"Authorization: Bearer \$GITHUB_TOKEN\" \
-        -H \"Content-Type: application/json\" \
-        -d \"\$graphql_query\"
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d "{\"query\": \"{ organization(login: \\\"intrale\\\") { projectV2(number: 1) { id title } } }\"}"
       ```
-    - Si el resultado incluye un campo `"id"` y `"title"`, se considera acceso válido al tablero.
-    - Si no puede acceder, el agente debe:
-        - Crear un issue titulado: `⚠️ No se puede acceder al tablero intrale/projects/1`
-        - Incluir en la descripción:
-            - El contenido del query
-            - La respuesta completa del servidor
-            - El contexto del entorno actual (repo, branch, etc.)
-        - Mover esta issue a la columna `"Todo"` y asignarla a `leitolarreta`.
-
+    - Si la respuesta incluye los campos `"id"` y `"title"`, el acceso se considera exitoso.
+    - Si no puede acceder correctamente al proyecto:
+        - El agente debe crear un issue titulado:  
+          `⚠️ No se puede acceder al tablero intrale/projects/1`
+        - En la descripción debe incluir:
+            - El comando `curl` utilizado.
+            - La respuesta completa recibida del servidor.
+            - El contexto del entorno actual (nombre del repositorio activo, rama, etc.)
+        - Este issue debe colocarse en el estado `"Todo"` y ser asignado a `leitolarreta`.
 
 ### ❌ Si alguna validación falla:
 - El agente debe **crear automáticamente una issue** con el título:  

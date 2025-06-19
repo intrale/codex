@@ -12,12 +12,12 @@ echo "📦 Clonando repositorios de Codex..."
 [ ! -d ../backend ] && git clone https://$GITHUB_TOKEN@github.com/intrale/backend.git ../backend
 [ ! -d ../users ] && git clone https://$GITHUB_TOKEN@github.com/intrale/users.git ../users
 
-# Se otorgan permisos a gradle
+# Otorgar permisos de ejecución a gradle
 chmod +x ../app/gradlew
 chmod +x ../backend/gradlew
 chmod +x ../users/gradlew
 
-# Asegurarse de que /workspace/codex tenga remoto configurado si es un repo válido
+# Asegurar que /workspace/codex tenga remote configurado si es un repo válido
 if [ -d /workspace/codex/.git ]; then
   cd /workspace/codex
   if ! git remote get-url origin > /dev/null 2>&1; then
@@ -26,26 +26,13 @@ if [ -d /workspace/codex/.git ]; then
   fi
 fi
 
-# Verificación de acceso a Projects v2 con GraphQL (versión escapada correcta)
+# Verificación de acceso a Projects v2 con GraphQL (sin errores de JSON)
 echo "🔎 Verificando acceso al Project v2 de la organización 'intrale'..."
-
-read -r -d '' graphql_query << EOM
-{
-  "query": "{
-    organization(login: \\\"intrale\\\") {
-      projectV2(number: 1) {
-        id
-        title
-      }
-    }
-  }"
-}
-EOM
 
 response=$(curl -s -X POST https://api.github.com/graphql \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Content-Type: application/json" \
-  -d "$graphql_query")
+  -d "{\"query\": \"{ organization(login: \\\"intrale\\\") { projectV2(number: 1) { id title } } }\"}")
 
 if echo "$response" | grep -q '"id"'; then
   echo "✅ Acceso correcto al proyecto v2 de 'intrale'."
