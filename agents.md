@@ -45,11 +45,28 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
     - El agente debe ejecutar `gh auth status` y verificar que existe una sesión activa.
     - Si el estado indica que no hay autenticación válida, debe asumir que no puede operar.
 
+4. **Verificación de acceso al tablero de proyecto**
+    - El agente debe acceder correctamente al tablero clásico de GitHub ubicado en:  
+      `https://github.com/orgs/intrale/projects/1`
+    - Para hacerlo, debe utilizar la API REST de GitHub con el encabezado:  
+      `Accept: application/vnd.github.inertia-preview+json`
+    - Debe obtener la lista de columnas con:  
+      `GET /projects/1/columns`
+    - Verificar que la columna `"Todo"` exista.
+    - Si no puede acceder o no encuentra la columna `"Todo"`:
+        - El agente debe crear un issue titulado:  
+          `⚠️ No se puede acceder al tablero intrale/projects/1`
+        - En la descripción debe incluir:
+            - El endpoint al que intentó acceder.
+            - El mensaje de error recibido o respuesta vacía.
+            - El contexto actual del entorno (nombre del repositorio activo, branch, etc.)
+        - Debe mover esta issue a la columna `"Todo"` y asignarla a `leitolarreta`.
+
 ### ❌ Si alguna validación falla:
 - El agente debe **crear automáticamente una issue** con el título:  
   `⚠️ Problema de entorno detectado: imposibilidad de generar PRs`
 - En la descripción debe incluir:
-    - Qué validación falló (creación de PR, asignación o autenticación).
+    - Qué validación falló (creación de PR, asignación, autenticación o acceso al tablero).
     - Detalles técnicos del error recibido (mensaje o stacktrace).
     - Hora y contexto de la ejecución.
 - Debe mover esta issue a la columna **"Todo"**.
@@ -71,18 +88,16 @@ Cuando se indique que el agente debe **"trabajar"**, debe:
     - Si no puede moverlo por cualquier motivo (permisos, estructura, inconsistencia del issue, error interno), debe:
         - Mover la tarea a **"Blocked"** inmediatamente.
         - Comentar el motivo completo del fallo, incluyendo cualquier error técnico o condición encontrada.
-        - Esto garantiza que cualquier observador del tablero pueda ver en tiempo real el intento y su resultado.
     - Si logra moverlo:
         - Analizar el título y la descripción.
         - Determinar si puede resolver la tarea automáticamente.
         - Si puede:
             - Asignarlo a `leitocodexbot`.
             - Crear una rama con el nombre relacionado al issue.
-            - Ejecutar los cambios requeridos (ya sean de código, pruebas o documentación).
-            - Realizar comentarios parciales de progreso en el issue.
+            - Ejecutar los cambios requeridos (código, pruebas o documentación).
             - Comentar en el issue lo realizado.
-            - Generar **obligatoriamente** un Pull Request con los cambios realizados y asignarlo a `leitolarreta`.
-            - Si no se puede generar el PR, aplicar el protocolo de reintento (ver sección siguiente).
+            - Generar **obligatoriamente** un Pull Request con los cambios y asignarlo a `leitolarreta`.
+            - Si no se puede generar el PR, aplicar el protocolo de reintento.
             - Mover a **"Ready"** solo si el Pull Request fue creado correctamente.
         - Si no puede resolverla:
             - Mover a **"Blocked"**.
@@ -265,4 +280,4 @@ El agente `leitocodexbot` es un asistente automatizado que potencia la eficienci
 Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y fluidez en el desarrollo.  
 **Toda ejecución que implique cambios debe generar obligatoriamente un Pull Request.**  
 **Toda tarea que no pueda moverse a "In Progress" debe bloquearse de inmediato con su motivo técnico.**  
-**Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs, asignarlos correctamente y confirmar la autenticación activa del entorno.**
+**Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs, asignarlos correctamente, confirmar la autenticación activa y verificar el acceso al tablero de proyecto.**

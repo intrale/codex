@@ -55,3 +55,17 @@ if [ -d /workspace/codex/.git ]; then
     git remote add origin https://github.com/intrale/codex.git
   fi
 fi
+
+# Verificación de acceso al proyecto clásico intrale/projects/1
+echo "🔎 Verificando acceso al tablero intrale/projects/1..."
+
+project_id=1
+columns=$(gh api /projects/$project_id/columns --header "Accept: application/vnd.github.inertia-preview+json" 2>/dev/null)
+
+if echo "$columns" | grep -q '"name": "Todo"'; then
+  echo "✅ Acceso correcto al proyecto 'intrale', columna 'Todo' encontrada."
+else
+  echo "❌ No se pudo acceder correctamente al proyecto o no se encontró la columna 'Todo'."
+  echo "$columns"
+  exit 1
+fi
