@@ -29,31 +29,35 @@ Este documento define la configuración y comportamiento esperado del agente aut
 
 ---
 
-## 🗂️ Estructura del Workspace y Reglas de Interpretación
+## 🧪 Validación previa a la ejecución
 
-### `/workspace/codex/`
-- Contiene **todo lo relacionado con el entorno Codex**.
-- **No incluye el código funcional de los módulos**, sino herramientas auxiliares, lógica de automatización y soporte general.
-- Dentro de este directorio, la carpeta **`docs/`** incluye:
-    - Documentación detallada sobre la arquitectura general.
-    - Descripción de funcionalidades y diseño de cada módulo.
-    - Considerar todos los documentos en esta carpeta como referencia para entender el contexto del proyecto.
+Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el agente `leitocodexbot` debe realizar una **verificación obligatoria de entorno** para asegurarse de que puede generar entregables correctamente.
 
-### `/workspace/backend/`
-- Contiene el **código base y común a todos los módulos**.
-- Este código es **heredado o reutilizado** por los módulos funcionales.
-- Antes de desarrollar funcionalidades o generar pruebas unitarias en otros módulos, el agente debe **entender este código base**.
+### 🔍 Validaciones requeridas:
 
-### `/workspace/users/`
-- Contiene la implementación de todos los **endpoints relacionados con usuarios, perfiles y negocios**.
-- El agente debe considerar este módulo para tareas de:
-    - Registro y autenticación de usuarios.
-    - Asignación y validación de roles.
-    - Registro y aprobación de negocios.
+1. **Prueba de generación de Pull Requests**
+    - El agente debe verificar que puede crear un Pull Request en el repositorio de trabajo actual.
+
+2. **Verificación de asignación de PR**
+    - El agente debe confirmar que puede asignar correctamente un Pull Request al usuario `leitolarreta`.
+
+### ❌ Si alguna validación falla:
+- El agente debe **crear automáticamente una issue** con el título:  
+  `⚠️ Problema de entorno detectado: imposibilidad de generar PRs`
+- En la descripción debe incluir:
+    - Qué validación falló (creación de PR o asignación).
+    - Detalles técnicos del error recibido (mensaje o stacktrace).
+    - Hora y contexto de la ejecución.
+- Debe mover esta issue a la columna **"Todo"**.
+- Debe asignarla directamente al usuario `leitolarreta`.
+
+> ⚠️ Si esta validación falla, el agente **no debe continuar con ninguna otra ejecución**, ni intentar procesar tareas del tablero.
 
 ---
 
 ## 🔁 Ejecución de Tareas Automáticas
+
+⚠️ Antes de ejecutar esta acción, debe completarse satisfactoriamente la validación de entorno descrita en la sección **🧪 Validación previa a la ejecución**.
 
 Cuando se indique que el agente debe **"trabajar"**, debe:
 
@@ -74,7 +78,7 @@ Cuando se indique que el agente debe **"trabajar"**, debe:
             - Realizar comentarios parciales de progreso en el issue.
             - Comentar en el issue lo realizado.
             - Generar **obligatoriamente** un Pull Request con los cambios realizados y asignarlo a `leitolarreta`.
-            - Si no se puede generar el PR, mover la tarea a **"Blocked"** con la justificación técnica.
+            - Si no se puede generar el PR, aplicar el protocolo de reintento (ver sección siguiente).
             - Mover a **"Ready"** solo si el Pull Request fue creado correctamente.
         - Si no puede resolverla:
             - Mover a **"Blocked"**.
@@ -95,20 +99,32 @@ Siempre que la ejecución de una tarea involucre cambios en el código fuente o 
 
 1. Crear una nueva rama usando el prefijo adecuado (`feature/`, `bugfix/`, `refactor/`, `docs/`) y un nombre descriptivo.
 2. Realizar los commits correspondientes en esa rama.
-3. Generar automáticamente un Pull Request con las siguientes características:
+3. Intentar generar automáticamente un Pull Request con las siguientes características:
     - Título: `[auto] <descripción breve del cambio realizado>`
     - Descripción técnica clara y directa.
     - Referencia al issue mediante `Closes #<número de issue>`.
     - Asignado al usuario `leitolarreta`.
-4. Comentar en el issue ejecutado indicando:
-    - Qué se hizo.
-    - Enlace directo al PR creado.
-5. ❌ **No debe hacer merge del PR automáticamente.**
-6. Solo debe mover el issue a **"Ready"** si el Pull Request fue creado correctamente.
+
+4. En caso de que la creación del Pull Request falle:
+    - El agente debe **reintentar hasta 3 veces** la creación del PR.
+    - Si tras 3 intentos sigue fallando, debe:
+        - Mover el issue a la columna **"Blocked"**.
+        - Comentar en el issue detallando el motivo técnico del fallo y que se intentó varias veces.
+        - Incluir el **stacktrace o mensaje de error** recibido, si aplica.
+
+5. Si el PR se crea correctamente:
+    - Comentar en el issue ejecutado indicando:
+        - Qué se hizo.
+        - Enlace directo al PR creado.
+    - Mover el issue a **"Ready"**.
+
+6. ❌ **No debe hacer merge del PR automáticamente.**
 
 ---
 
 ## 🔹 Creación de Subtareas
+
+⚠️ Antes de comenzar, debe completarse satisfactoriamente la validación de entorno descrita en la sección **🧪 Validación previa a la ejecución**.
 
 Cuando se indique que el agente debe **"refinar"**, debe:
 
@@ -244,4 +260,5 @@ Automatizar tareas operativas: generación de código, ramas, PRs, comentarios, 
 El agente `leitocodexbot` es un asistente automatizado que potencia la eficiencia del equipo, pero **nunca reemplaza la revisión ni la decisión humana**.  
 Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y fluidez en el desarrollo.  
 **Toda ejecución que implique cambios debe generar obligatoriamente un Pull Request.**  
-**Toda tarea que no pueda moverse a "In Progress" debe bloquearse de inmediato con su motivo técnico.**
+**Toda tarea que no pueda moverse a "In Progress" debe bloquearse de inmediato con su motivo técnico.**  
+**Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs y asignarlos correctamente.**
