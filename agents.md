@@ -67,6 +67,20 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
             - La respuesta completa recibida del servidor.
             - El contexto del entorno actual (nombre del repositorio activo, rama, etc.)
         - Este issue debe colocarse en el estado `"Todo"` y ser asignado a `leitolarreta`.
+5. **Verificación de permisos en repositorio actual**
+    - Para cada repositorio individual, el agente debe ejecutar:
+      ```bash
+      curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/intrale/<repo>
+      ```
+    - Si la respuesta no contiene `"permissions": { "push": true }`, se debe bloquear la ejecución para ese repositorio, crear una issue con título:
+      `⚠️ Permisos insuficientes sobre el repositorio <repo>`
+      y asignarla a `leitolarreta`.
+6. **Prevención de ejecuciones paralelas**
+    - Antes de comenzar, el agente debe validar si ya hay otra ejecución activa (por ejemplo, buscando un issue con etiqueta `[ejecución-activa]`, o mediante un archivo de lock).
+    - Si detecta otra ejecución, debe abortar, crear un issue de alerta y no continuar con tareas.
+7. **Control de tareas estancadas**
+    - Antes de iniciar una ejecución, el agente debe revisar si hay issues asignados a él mismo en `In Progress` sin cambios en más de 12 horas.
+    - Si detecta alguno, debe moverlo a `Blocked` y comentar el motivo.
 
 ### ❌ Si alguna validación falla:
 - El agente debe **crear automáticamente una issue** con el título:  
@@ -96,7 +110,13 @@ Cuando se indique que el agente debe **"trabajar"**, debe:
         - Comentar el motivo completo del fallo, incluyendo cualquier error técnico o condición encontrada.
     - Si logra moverlo:
         - Analizar el título y la descripción.
-        - Determinar si puede resolver la tarea automáticamente.
+        - Crear una rama con el nombre relacionado al issue, siguiendo la nomenclatura de ramas definida en la sección **🌱 Nomenclatura de Ramas**.
+        - Si la rama ya existe, debe:
+            - Comentar en el issue que la rama ya fue creada previamente.
+            - Actualizar el repositorio local con los últimos cambios de esa rama.
+            - Verificar si ya hay un Pull Request abierto con esa rama como `head`.
+                - Si existe, comentar en el issue que el PR ya está generado y evitar crear uno nuevo.
+          - Determinar si puede resolver la tarea automáticamente.
         - Si puede:
             - Asignarlo a `leitocodexbot`.
             - Crear una rama con el nombre relacionado al issue.
@@ -108,7 +128,7 @@ Cuando se indique que el agente debe **"trabajar"**, debe:
         - Si no puede resolverla:
             - Mover a **"Blocked"**.
             - Comentar el motivo y adjuntar el **stacktrace** si aplica.
-
+   - Validar que no haya dependencias activas no resueltas (por ejemplo, campo `Blocked by #n` en la descripción o etiquetas).
 3. Validaciones al finalizar:
     - No debe haber issues asignados a `leitocodexbot` en **"In Progress"**.
     - No debe haber issues en la columna **"Todo"**.
@@ -262,7 +282,8 @@ Automatizar tareas operativas: generación de código, ramas, PRs, comentarios, 
 ---
 
 ## 🌱 Nomenclatura de Ramas
-
+- Considerar que si desde un issue se intenta crear una rama esta debe tener relacion al nombre del issue y al prefijo correspondiente.
+- Si el issue es una sub-tarea, la rama sobre la que trabajar debe ser la misma rama que la que utilizo el padre. Por lo tanto la nomenclatura de la rama debe provenir del padre para que todos los hijos puedan reutilizar la misma rama.
 | Tipo            | Prefijo            | Uso                                  |
 |-----------------|--------------------|---------------------------------------|
 | Funcionalidad   | `feature/<desc>`   | Nuevas características                |
@@ -290,3 +311,6 @@ Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y flu
 **Toda ejecución que implique cambios debe generar obligatoriamente un Pull Request.**  
 **Toda tarea que no pueda moverse a "In Progress" debe bloquearse de inmediato con su motivo técnico.**  
 **Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs, asignarlos correctamente, confirmar la autenticación activa y verificar el acceso al tablero de proyecto.**
+**Las ejecuciones del agente deben ser únicas y no simultáneas.**
+**El agente debe detectar y bloquear tareas estancadas que sigan en "In Progress" por más de 12 horas.**
+
