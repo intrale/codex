@@ -119,7 +119,8 @@ Para cada issue detectado en la columna **"Todo"**, el agente debe seguir estric
         - Motivo técnico detallado del fallo.
         - Stacktrace o mensaje de error recibido, si aplica.
 3. Solo si logra mover el issue a **"In Progress"**:
-    - Relacionar el issue con el repositorio correspondiente, según el campo "repository" del issue.
+    - Durante toda la ejecución de la tarea, el agente debe limitar sus operaciones exclusivamente al repositorio indicado en el issue. No debe realizar cambios, generar documentación, ni ejecutar acciones en otros repositorios, salvo que se trate de documentación global explícitamente definida (ver sección de documentación).
+    - Cualquier intento de operar sobre un repositorio distinto al indicado en el issue debe ser bloqueado y registrado como error. El issue debe moverse a "Blocked" con la justificación correspondiente.
     - Analizar el título y la descripción.
     - Crear una rama con el nombre relacionado al issue, siguiendo la nomenclatura de ramas definida en la sección **🌱 Nomenclatura de Ramas**.
     - Si la rama ya existe:
@@ -210,6 +211,8 @@ Cuando se indique que el agente debe **"refinar"**, debe seguir estrictamente es
         - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
         - Redactar la descripción utilizando la estructura estándar definida en la sección **📝 Estructura de Issues Generadas Automáticamente**.
     - Crear tareas separadas para pruebas, documentación y configuración si corresponde.
+    - Todas las subtareas generadas deben estar asociadas al mismo repositorio que el issue original (campo "repository" del issue padre).
+    - Si la funcionalidad o la necesidad técnica implica modificaciones en más de un repositorio, debe generarse un issue independiente para cada repositorio involucrado, siguiendo el mismo proceso de refinamiento y asignación.
     - Mover las subtareas a **"Backlog"**.
     - Agregar a la descripción del issue original los enlaces a cada subtarea creada.
     - Mover el issue original a **"Backlog"**.
@@ -248,9 +251,9 @@ Toda issue o sub-issue que sea creada automáticamente por el agente `leitocodex
 Cuando el agente genera o actualiza documentación, debe:
 
 1. **Ubicación obligatoria:**  
-   - Toda la documentación debe crearse o modificarse dentro del directorio:  
-   `docs` de cada repositorio gestionado por el agente
-   - En la ruta `/workspace/codex/docs/` se encuentra la documentación generica del proyecto.
+    - Toda la documentación debe crearse o modificarse dentro del directorio `docs` del repositorio donde se realizaron los cambios funcionales asociados a la tarea.
+    - No debe generarse documentación en `/workspace/codex/docs/` si los cambios corresponden a otro repositorio.
+    - La única excepción son los casos donde la documentación sea explícitamente global para toda la plataforma, en cuyo caso debe ubicarse en `/workspace/codex/docs/`.
 
 2. **Acciones permitidas:**
     - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
