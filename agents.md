@@ -108,41 +108,45 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
 > 📌 **Importante:** Al ejecutar esta acción, el agente debe iterar y buscar issues en **todos los repositorios presentes dentro de `/workspace`**, independientemente de desde qué subdirectorio se inicie la ejecución.  
 > Si la implementación actual limita la búsqueda solo al repositorio activo o al repositorio asociado al directorio de ejecución, este comportamiento es incorrecto y debe ser ajustado para cumplir con esta especificación.
 
+### 🔄 Flujo estricto de procesamiento de tareas
 
-Cuando se indique que el agente debe **"trabajar"**, debe:
+Para cada issue detectado en la columna **"Todo"**, el agente debe seguir estrictamente este flujo:
 
-1. Buscar todos los issues en la columna **"Todo"** del tablero, para todos los "repository" que el entorno gestiona.
-2. Para cada issue:
-    - Relacionar el issue con el repositorio correspondiente, segun el "repository" indicado en el issue.
-    - Intentar mover a **"In Progress"**.
-    - Si no puede moverlo por cualquier motivo (permisos, estructura, inconsistencia del issue, error interno), debe:
-        - Mover la tarea a **"Blocked"** inmediatamente.
-        - Comentar el motivo completo del fallo, incluyendo cualquier error técnico o condición encontrada.
-    - Si logra moverlo:
-        - Analizar el título y la descripción.
-        - Crear una rama con el nombre relacionado al issue, siguiendo la nomenclatura de ramas definida en la sección **🌱 Nomenclatura de Ramas**.
-        - Si la rama ya existe, debe:
-            - Comentar en el issue que la rama ya fue creada previamente.
-            - Actualizar el repositorio local con los últimos cambios de esa rama.
-            - Verificar si ya hay un Pull Request abierto con esa rama como `head`.
-                - Si existe, comentar en el issue que el PR ya está generado y evitar crear uno nuevo.
-          - Determinar si puede resolver la tarea automáticamente.
-        - Si puede:
-            - Asignarlo a `leitocodexbot`.
-            - Crear una rama con el nombre relacionado al issue.
-            - Ejecutar los cambios requeridos (código, pruebas o documentación).
-            - Comentar en el issue lo realizado.
-            - Generar **obligatoriamente** un Pull Request con los cambios y asignarlo a `leitolarreta`.
-            - Si no se puede generar el PR, aplicar el protocolo de reintento.
-            - Mover a **"Ready"** solo si el Pull Request fue creado correctamente.
-        - Si no puede resolverla:
-            - Mover a **"Blocked"**.
-            - Comentar el motivo y adjuntar el **stacktrace** si aplica.
-   - Validar que no haya dependencias activas no resueltas (por ejemplo, campo `Blocked by #n` en la descripción o etiquetas).
-3. Validaciones al finalizar:
-    - No debe haber issues asignados a `leitocodexbot` en **"In Progress"**.
-    - No debe haber issues en la columna **"Todo"**.
-    - Si quedan sin ejecutar, debe comentarse el motivo.
+1. **Antes de cualquier otra acción**, el agente debe intentar mover el issue a la columna **"In Progress"**.
+2. Si no puede moverlo por cualquier motivo (permisos insuficientes, error interno, inconsistencias), debe:
+    - Mover el issue a la columna **"Blocked"** inmediatamente.
+    - Comentar en el issue indicando:
+        - Motivo técnico detallado del fallo.
+        - Stacktrace o mensaje de error recibido, si aplica.
+3. Solo si logra mover el issue a **"In Progress"**:
+    - Relacionar el issue con el repositorio correspondiente, según el campo "repository" del issue.
+    - Analizar el título y la descripción.
+    - Crear una rama con el nombre relacionado al issue, siguiendo la nomenclatura de ramas definida en la sección **🌱 Nomenclatura de Ramas**.
+    - Si la rama ya existe:
+        - Comentar en el issue que la rama ya fue creada previamente.
+        - Actualizar el repositorio local con los últimos cambios de esa rama.
+        - Verificar si ya hay un Pull Request abierto con esa rama como `head`.
+            - Si existe, comentar en el issue que el PR ya está generado y evitar crear uno nuevo.
+    - Determinar si puede resolver la tarea automáticamente.
+4. Si puede resolverla:
+    - Asignar el issue a `leitocodexbot`.
+    - Ejecutar los cambios requeridos (código, pruebas o documentación).
+    - Comentar en el issue lo realizado.
+    - Generar **obligatoriamente** un Pull Request con los cambios y asignarlo a `leitolarreta`.
+    - Si no se puede generar el PR, aplicar el protocolo de reintento.
+    - Mover el issue a **"Ready"** solo si el Pull Request fue creado correctamente.
+5. Si no puede resolverla:
+    - Mover el issue a **"Blocked"**.
+    - Comentar el motivo y adjuntar el **stacktrace** si aplica.
+6. Validar que no haya dependencias activas no resueltas (por ejemplo, campo `Blocked by #n` en la descripción o etiquetas).
+
+### 🛑 Condiciones de finalización
+
+Al finalizar la ejecución:
+
+- No debe haber issues asignados a `leitocodexbot` en la columna **"In Progress"**.
+- No debe haber issues en la columna **"Todo"** pendientes de ejecutar.
+- Si quedan sin ejecutar, el agente debe comentar en cada issue el motivo detallado.
 
 > 📌 Si no se genera un Pull Request, la tarea se considerará incompleta, incluso si los cambios fueron aplicados localmente.
 
@@ -184,25 +188,32 @@ Siempre que la ejecución de una tarea involucre cambios en el código fuente o 
 
 ⚠️ Antes de comenzar, debe completarse satisfactoriamente la validación de entorno descrita en la sección **🧪 Validación previa a la ejecución**.
 
-Cuando se indique que el agente debe **"refinar"**, debe:
+### 🔄 Flujo estricto de refinamiento de tareas
+
+Cuando se indique que el agente debe **"refinar"**, debe seguir estrictamente este flujo:
 
 1. Revisar todos los issues en la columna **"Todo"** del tablero, para todos los "repository" que el entorno gestiona.
-2. Mover el issue a **"In Progress"**.
-    - Si no se puede mover por cualquier motivo, se debe pasar a **"Blocked"** e indicar claramente el error técnico o motivo específico del rechazo.
-3. Evaluar título y descripción para determinar viabilidad.
-4. Para funcionalidades complejas:
-    - Generar subtareas con prefijo `[subtask]`.
-    - Aplicar el principio de responsabilidad única (una tarea por objetivo).
+2. **Antes de cualquier otra acción**, el agente debe intentar mover el issue a la columna **"In Progress"**.
+3. Si no puede moverlo por cualquier motivo (permisos insuficientes, error interno, inconsistencias), debe:
+    - Mover el issue a la columna **"Blocked"** inmediatamente.
+    - Comentar en el issue indicando:
+        - Motivo técnico detallado del fallo.
+        - Stacktrace o mensaje de error recibido, si aplica.
+4. Solo si logra mover el issue a **"In Progress"**:
+    - Evaluar el título y la descripción para determinar viabilidad.
+    - Para funcionalidades complejas:
+        - Generar subtareas con prefijo `[subtask]`.
+        - Aplicar el principio de responsabilidad única (una tarea por objetivo).
     - En cada subtarea:
         - Indicar de forma clara y **técnica** el **nombre exacto** del componente, clase, función o endpoint involucrado.
         - Incluir la **ruta completa** dentro del workspace para ubicar el componente (por ejemplo: `/workspace/users/src/domain/usecase/RegisterUserUseCase.kt`).
         - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
         - Redactar la descripción utilizando la estructura estándar definida en la sección **📝 Estructura de Issues Generadas Automáticamente**.
-5. Crear tareas separadas para pruebas, documentación y configuración si corresponde.
-6. Mover las subtareas a **"Backlog"**.
-7. Agregar a la descripción del issue original los enlaces a cada subtarea creada.
-8. Mover el issue original a **"Backlog"**.
-9. **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
+    - Crear tareas separadas para pruebas, documentación y configuración si corresponde.
+    - Mover las subtareas a **"Backlog"**.
+    - Agregar a la descripción del issue original los enlaces a cada subtarea creada.
+    - Mover el issue original a **"Backlog"**.
+    - **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
 
 ---
 
