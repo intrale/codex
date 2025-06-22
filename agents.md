@@ -26,6 +26,10 @@ Este documento define la configuración y comportamiento esperado del agente aut
     - Mover el issue a la columna **"Blocked"**.
     - Comentar el motivo del bloqueo y adjuntar el **stacktrace** si aplica.
 - No puede haber issues asignados a `leitocodexbot` en la columna **"In Progress"** al finalizar una ejecución de tareas.
+- Cuando el agente deba finalizar sin haber completado todas las tareas, debe:
+    - Comentar en el issue el motivo de la no finalización.
+    - Mover el issue a la columna **"Blocked"**.
+    - Crear una tarea nueva en el tablero en estado "Todo" mencionando el motivo por el cual no puede continuar con el resto de tareas y debe asignarla a `leitolarreta` para su revisión.
 
 ---
 
@@ -36,7 +40,8 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
 ### 🔍 Validaciones requeridas:
 
 1. **Prueba de generación de Pull Requests**
-    - El agente debe verificar que puede crear un Pull Request en el repositorio de trabajo actual.
+    - El agente debe verificar que puede crear un Pull Request en cada uno de los repositorios que gestiona el entorno actual.
+    - Recordar que en la carpeta `/workspace/[nombre repositorio]/` se encuentran los repositorios que el agente debe gestionar.
 
 2. **Verificación de asignación de PR**
     - El agente debe confirmar que puede asignar correctamente un Pull Request al usuario `leitolarreta`.
@@ -102,8 +107,9 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
 
 Cuando se indique que el agente debe **"trabajar"**, debe:
 
-1. Buscar todos los issues en la columna **"Todo"** del tablero.
+1. Buscar todos los issues en la columna **"Todo"** del tablero, para todos los "repository" que el entorno gestiona.
 2. Para cada issue:
+    - Relacionar el issue con el repositorio correspondiente, segun el "repository" indicado en el issue.
     - Intentar mover a **"In Progress"**.
     - Si no puede moverlo por cualquier motivo (permisos, estructura, inconsistencia del issue, error interno), debe:
         - Mover la tarea a **"Blocked"** inmediatamente.
@@ -176,7 +182,7 @@ Siempre que la ejecución de una tarea involucre cambios en el código fuente o 
 
 Cuando se indique que el agente debe **"refinar"**, debe:
 
-1. Revisar todos los issues en **"Todo"**.
+1. Revisar todos los issues en la columna **"Todo"** del tablero, para todos los "repository" que el entorno gestiona.
 2. Mover el issue a **"In Progress"**.
     - Si no se puede mover por cualquier motivo, se debe pasar a **"Blocked"** e indicar claramente el error técnico o motivo específico del rechazo.
 3. Evaluar título y descripción para determinar viabilidad.
