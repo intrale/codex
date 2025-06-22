@@ -105,6 +105,10 @@ Antes de ejecutar cualquier acción de tipo **"trabajar"** o **"refinar"**, el a
 
 ⚠️ Antes de ejecutar esta acción, debe completarse satisfactoriamente la validación de entorno descrita en la sección **🧪 Validación previa a la ejecución**.
 
+> 📌 **Importante:** Al ejecutar esta acción, el agente debe iterar y buscar issues en **todos los repositorios presentes dentro de `/workspace`**, independientemente de desde qué subdirectorio se inicie la ejecución.  
+> Si la implementación actual limita la búsqueda solo al repositorio activo o al repositorio asociado al directorio de ejecución, este comportamiento es incorrecto y debe ser ajustado para cumplir con esta especificación.
+
+
 Cuando se indique que el agente debe **"trabajar"**, debe:
 
 1. Buscar todos los issues en la columna **"Todo"** del tablero, para todos los "repository" que el entorno gestiona.
