@@ -243,6 +243,7 @@ Cuando el agente genera o actualiza documentación, debe:
 3. **Restricciones:**
     - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
     - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
+    - ❌ No debe ejecutar pruebas unitarias si la tarea es exclusivamente de documentación.
 
 4. **Buenas prácticas al documentar:**
     - Incluir referencias claras al módulo o componente involucrado.
