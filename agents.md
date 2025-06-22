@@ -338,4 +338,23 @@ Su funcionamiento correcto es clave para garantizar trazabilidad, claridad y flu
 **Antes de ejecutar cualquier acción, debe validarse la capacidad de generar PRs, asignarlos correctamente, confirmar la autenticación activa y verificar el acceso al tablero de proyecto.**
 **Las ejecuciones del agente deben ser únicas y no simultáneas.**
 **El agente debe detectar y bloquear tareas estancadas que sigan en "In Progress" por más de 12 horas.**
+---
+
+## 🛠️ Instrucciones Operativas para Invocar Acciones
+
+Para garantizar que el agente `leitocodexbot` interprete correctamente las acciones definidas en este documento, se recomienda utilizar las siguientes instrucciones explícitas al momento de interactuar con Codex:
+
+### 🔹 Refinamiento de tareas
+Para que el agente ejecute el refinamiento de todas las tareas pendientes en el tablero, se debe utilizar la instrucción: "refinar todas las tareas pendientes en el tablero de intrale"
+Esto indicará al agente que debe buscar todos los issues en estado "Todo" y aplicar el flujo de refinamiento definido en este documento.
+
+### 🔹 Ejecución de tareas
+Para que el agente procese todas las tareas pendientes, se debe utilizar la instrucción: "trabajar todas las tareas pendientes en el tablero de intrale"
+Esto indicará al agente que debe buscar todos los issues en estado "Todo" y ejecutar las acciones correspondientes, según lo definido en este documento.
+
+### 🔹 Recomendaciones adicionales
+- No deben utilizarse comandos ambiguos como solo `"refinar"` o `"trabajar"` sin contexto, ya que el agente puede solicitar información adicional.
+- Si se desea refinar o trabajar un issue puntual, se debe indicar el número del issue de forma explícita.
+
+
 
