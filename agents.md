@@ -233,8 +233,9 @@ Toda issue o sub-issue que sea creada automáticamente por el agente `leitocodex
 Cuando el agente genera o actualiza documentación, debe:
 
 1. **Ubicación obligatoria:**  
-   Toda la documentación debe crearse o modificarse dentro del directorio:  
-   `/workspace/codex/docs/`
+   - Toda la documentación debe crearse o modificarse dentro del directorio:  
+   `docs` de cada repositorio gestionado por el agente
+   - En la ruta `/workspace/codex/docs/` se encuentra la documentación generica del proyecto.
 
 2. **Acciones permitidas:**
     - Crear nuevos documentos relacionados con funcionalidades, módulos o arquitectura.
@@ -242,7 +243,6 @@ Cuando el agente genera o actualiza documentación, debe:
 
 3. **Restricciones:**
     - ❌ **No debe modificar** el archivo `agents.md` bajo ninguna circunstancia.
-    - ❌ No debe generar archivos fuera de `/workspace/codex/docs/`.
     - ❌ No debe ejecutar pruebas unitarias si la tarea es exclusivamente de documentación.
 
 4. **Buenas prácticas al documentar:**
