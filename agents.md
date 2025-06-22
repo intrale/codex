@@ -26,7 +26,7 @@ Este documento define la configuración y comportamiento esperado del agente aut
     - Mover el issue a la columna **"Blocked"**.
     - Comentar el motivo del bloqueo y adjuntar el **stacktrace** si aplica.
 - No puede haber issues asignados a `leitocodexbot` en la columna **"In Progress"** al finalizar una ejecución de tareas.
-- Cuando el agente deba finalizar sin haber completado todas las tareas, debe:
+- Cuando el agente deba finalizar sin haber completado todas las tareas (es decir, aun quedan tareas en la columna "Todo" para cualquier repositorio), debe:
     - Comentar en el issue el motivo de la no finalización.
     - Mover el issue a la columna **"Blocked"**.
     - Crear una tarea nueva en el tablero en estado "Todo" mencionando el motivo por el cual no puede continuar con el resto de tareas y debe asignarla a `leitolarreta` para su revisión.
