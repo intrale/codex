@@ -113,8 +113,7 @@ Cuando se indique que el agente debe **"refinar"**, debe seguir estrictamente es
         - No deben dejarse referencias genéricas ni vagas como “el controlador de usuarios”.
         - Redactar la descripción utilizando la estructura estándar definida en la sección **📝 Estructura de Issues Generadas Automáticamente**.
     - Agregar detalle para pruebas, documentación y configuración si corresponde.
-    - Mover el issue a **"Backlog"**.
-    - **Priorizar las subtareas creadas**, ubicándolas en la parte superior de la columna **"Backlog"** para garantizar visibilidad.
+    - Mover el issue a **"Todo"**.
 
 ---
 
@@ -138,8 +137,6 @@ Toda issue o sub-issue que sea creada automáticamente por el agente `leitocodex
 
 - ## 📘 Notas técnicas
   Guía para la implementación, consideraciones de estilo o decisiones de diseño/código específicas.
-- ## 📘 Issue principal
-  Enlace al issue principal relacionado con esta tarea, si aplica.
 
 > 📌 Esta estructura debe aplicarse **en todas las tareas** generadas automáticamente, incluyendo subtareas de refinamiento.  
 > El contenido debe ser claro, técnico y sin ambigüedades, para facilitar su comprensión por cualquier desarrollador.
@@ -255,6 +252,3 @@ Esto indicará al agente que debe buscar todos los issues en estado "Todo" y eje
 ### 🔹 Recomendaciones adicionales
 - No deben utilizarse comandos ambiguos como solo `"refinar"` o `"trabajar"` sin contexto, ya que el agente puede solicitar información adicional.
 - Si se desea refinar o trabajar un issue puntual, se debe indicar el número del issue de forma explícita.
-
-
-
