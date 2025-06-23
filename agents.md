@@ -240,6 +240,8 @@ Toda issue o sub-issue que sea creada automáticamente por el agente `leitocodex
 
 - ## 📘 Notas técnicas
   Guía para la implementación, consideraciones de estilo o decisiones de diseño/código específicas.
+- ## 📘 Issue principal
+  Enlace al issue principal relacionado con esta tarea, si aplica.
 
 > 📌 Esta estructura debe aplicarse **en todas las tareas** generadas automáticamente, incluyendo subtareas de refinamiento.  
 > El contenido debe ser claro, técnico y sin ambigüedades, para facilitar su comprensión por cualquier desarrollador.
