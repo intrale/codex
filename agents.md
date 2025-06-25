@@ -37,7 +37,10 @@ Este documento define la configuración y comportamiento esperado del agente aut
         - Stacktrace o mensaje de error recibido, si aplica.
 3. Solo si logra mover el issue a **"In Progress"**:
     - Durante toda la ejecución de la tarea, el agente debe limitar sus operaciones exclusivamente al repositorio indicado en el issue. No debe realizar cambios, generar documentación, ni ejecutar acciones en otros repositorios, salvo que se trate de documentación global explícitamente definida (ver sección de documentación).
-    - Cualquier intento de operar sobre un repositorio distinto al indicado en el issue debe ser bloqueado y registrado como error. El issue debe moverse a "Blocked" con la justificación correspondiente.
+    - Si necesita operar con otro repositorio, debe:
+        - Comentar en el issue que no puede realizar la acción solo en el repositorio actual por lo que procedera a crear un nuevo issue que contemple la parte que este issue no va a realizar por tratarse de otro repositorio.
+        - Dejar el nuevo issue en estado **"Todo"**.
+        - Avanzar con la ejecución de la tarea en el repositorio actual para la parte que sí puede realizar.
     - Analizar el título y la descripción.
     - Crear una rama con el nombre relacionado al issue, siguiendo la nomenclatura de ramas definida en la sección **🌱 Nomenclatura de Ramas**.
     - Si la rama ya existe:
