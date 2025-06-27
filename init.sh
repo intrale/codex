@@ -30,17 +30,20 @@ echo "📦 Clonando repositorios de Codex..."
 [ ! -d ../app ] && git clone https://$GITHUB_TOKEN@github.com/intrale/app.git ../app
 [ ! -d ../backend ] && git clone https://$GITHUB_TOKEN@github.com/intrale/backend.git ../backend
 [ ! -d ../users ] && git clone https://$GITHUB_TOKEN@github.com/intrale/users.git ../users
+[ ! -d ../platform ] && git clone https://$GITHUB_TOKEN@github.com/intrale/platform.git ../platform
 
 # Configurar remotes
 configure_remote "../app" "app"
 configure_remote "../backend" "backend"
 configure_remote "../users" "users"
+configure_remote "../platform" "platform"
 configure_remote "/workspace/codex" "codex"
 
 # Otorgar permisos de ejecución a gradle
 chmod +x ../app/gradlew
 chmod +x ../backend/gradlew
 chmod +x ../users/gradlew
+chmod +x ../platform/gradlew
 
 # Verificar acceso al Project v2 de GitHub con GraphQL (escapado correcto)
 echo "🔎 Verificando acceso al Project v2 de la organización 'intrale'..."
