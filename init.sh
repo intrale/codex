@@ -20,6 +20,8 @@ sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
 echo "✅ Android SDK instalado correctamente."
 
+cd /workspace
+
 # Asegurarse de que la variable $GITHUB_TOKEN esté definida
 if [[ -z "$GITHUB_TOKEN" ]]; then
   echo "❌ Error: GITHUB_TOKEN no está definido"
